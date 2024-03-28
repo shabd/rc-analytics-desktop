@@ -50,7 +50,7 @@ class IronAnalysis:
             })
          
             self.know_sample_results.append([
-                             grams, ml, round(self.known_samples[sample]['Factor'] , 6), round(percent_fe, 2), known_value, round(bias, 2), round(iron_oxide, 2)
+                             sample,grams, ml, round(self.known_samples[sample]['Factor'] , 6), round(percent_fe, 2), known_value, round(bias, 2), round(iron_oxide, 2)
                         ])
             
         return self.know_sample_results

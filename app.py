@@ -29,19 +29,30 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.labels = {}
         self.init_values_labels()
 
+        self.sample_values = {}
+        self.sample_labels = {}
+        self.sample_cal_labels = [self.cr_SampleCalculations,self.feSampletabletext,self.SampleCalculations]
+        self.splitters =[self.splitter_7,self.splitter_2,self.splitter_5]
+        self.init_sample_values_labels()
+
         self.sample_info_labels = [self.cr_sample_info,self.FeSampleInfo,self.label]
+
+        self.factor_next_buttons = [self.cr_factor_next_button,self.fe_factor_next_button,self.iron_factor_next_button]
+
+        self.sample_table_widgets = [self.cr_sample_tableWidget,self.fe_tableWidget,self.IronSampleTable]
+
+        self.sample_save_buttons = [self.cr_save_button,self.fe_save_button,self.IronSaveButton]
+
+        self.sample_next_buttons = [self.cr_sample_next_button,self.fe_sample_next_button,self.iron_sample_next_button]
 
         self.index = 0
         self.init_tab()
 
         self.connect_next_buttons()
         
-        
-
-        self.hide_sample_calculations()
-        # these shouldnot be like this , they should be like buttons
-
         self.set_on_text_changed()
+
+        #QDoubleValidator
 
 
 
@@ -55,6 +66,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.currentSampleValues = {}
         self.populate_known_samples_table()
         self.update_sample_info_label()
+        self.hide_sample_calculations()
+
 
 
     def init_analysis(self):
@@ -77,6 +90,17 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.labels['ml']=[self.cr_factor_ml_text,self.fe_factor_ml_text,self.iron_factor_ml_text]
         self.labels['know'] = [self.cr_factor_know_value_text,self.fe_factor_know_value_text,self.iron_factor_know_value_text]
 
+
+    def init_sample_values_labels(self):
+        self.sample_values['ref_id']=[self.cr_sample_ref_id_value,self.fe_sample_ref_id,self.sample_ref_id]
+        self.sample_values['grams']=[self.cr_sample_grams_value,self.fe_sample_grams_value,self.sample_grams]
+        self.sample_values['ml']=[self.cr_sample_ml_value,self.fe_sample_ml_value,self.sample_ml]
+
+
+        # Are these needed ? or should be deleted?
+        self.sample_labels['ref_id']=[self.cr_sample_ref_id_text,self.fe_sample_ref_id_text,self.sample_ref_id_text]
+        self.sample_labels['grams']=[self.cr_sample_grams_text,self.fe_sample_grams_text,self.sample_grams_text]
+        self.sample_labels['ml']=[self.cr_sample_ml_text,self.fe_sample_ml_text,self.sample_ml_text]
     
 
 
@@ -114,14 +138,14 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     
     
     def change_next_into_clear_button(self):
-        self.cr_factor_next_button.setText("Clear")
+        self.factor_next_buttons[self.index].setText("Clear")
         try:
-            self.cr_factor_next_button.clicked.disconnect()
+            self.factor_next_buttons[self.index].clicked.disconnect()
         except TypeError:
             # No connections exist yet, so ignore
             pass
         # Connect the clear functionality
-        self.cr_factor_next_button.clicked.connect(self.clear_all_data)
+        self.factor_next_buttons[self.index].clicked.connect(self.clear_all_data)
                 
     def update_sample_info_label(self):
         if self.current_sample_index < len(self.analysis[self.index].known_samples):
@@ -180,12 +204,12 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
     
     def lock_sample_table(self):
-        self.cr_sample_tableWidget.setDisabled(True)
-        self.cr_sample_next_button.setDisabled(True)
+        self.sample_table_widgets[self.index].setDisabled(True)
+        self.sample_next_buttons[self.index].setDisabled(True)
 
     def unlock_sample_table(self):
-        self.cr_sample_tableWidget.setEnabled(True)
-        self.cr_sample_next_button.setEnabled(True)
+        self.sample_table_widgets[self.index].setEnabled(True)
+        self.sample_next_buttons[self.index].setEnabled(True)
 
             
     def hide_inputs_and_calculate(self):
@@ -218,16 +242,16 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.reset_current_state()
         self.show_all_factor_text_value()
   
-        self.cr_factor_next_button.setText("Next")
-        self.cr_factor_next_button.clicked.disconnect()
-        self.cr_factor_next_button.clicked.connect(self.factor_results)
+        self.factor_next_buttons[self.index].setText("Next")
+        self.factor_next_buttons[self.index].clicked.disconnect()
+        self.factor_next_buttons[self.index].clicked.connect(self.factor_results)
         # Optionally, clear any displayed results in your table
-        self.table_widgets[self.index].clearContents()
+        self.table_widgets[self.index].clearContents() 
         self.table_widgets[self.index].setRowCount(0)
         # Reset the UI to its initial state if needed
         
-        self.cr_sample_tableWidget.clearContents()
-        self.cr_sample_tableWidget.setRowCount(0)
+        self.sample_table_widgets[self.index].clearContents()
+        self.sample_table_widgets[self.index].setRowCount(0)
         
         self.populate_known_samples_table()
         self.update_sample_info_label()
@@ -236,9 +260,9 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     
     def sample_results(self):
         # Collect the input data
-        sample_id = self.cr_sample_ref_id_value.text()  # Assumes sampleIdLineEdit is your QLineEdit for sample ID
-        grams = self.cr_sample_grams_value.text()  # Assumes gramsLineEdit is for grams input
-        ml = self.cr_sample_ml_value.text()  # Assumes mlLineEdit is for ml input
+        sample_id = self.sample_values['ref_id'][self.index].text()  # Assumes sampleIdLineEdit is your QLineEdit for sample ID
+        grams = self.sample_values['grams'][self.index].text()  # Assumes gramsLineEdit is for grams input
+        ml = self.sample_values['ml'][self.index].text()  # Assumes mlLineEdit is for ml input
 
         # Convert inputs to appropriate types (assuming grams and ml should be floats)
         try:
@@ -262,30 +286,30 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         # The expected format of last_entry is [ref_id, grams, ml, cal_percent_cr, calc_cr2o3]
 
         # Add the new entry to the table
-        rowPosition = self.cr_sample_tableWidget.rowCount()
-        self.cr_sample_tableWidget.insertRow(rowPosition)
+        rowPosition = self.sample_table_widgets[self.index].rowCount()
+        self.sample_table_widgets[self.index].insertRow(rowPosition)
         for col, item in enumerate(last_entry):
-            self.cr_sample_tableWidget.setItem(rowPosition, col, QTableWidgetItem(str(item)))
+            self.sample_table_widgets[self.index].setItem(rowPosition, col, QTableWidgetItem(str(item)))
 
         # Optionally, clear the input fields after adding the data to the table
-        self.cr_sample_ref_id_value.clear()
-        self.cr_sample_grams_value.clear()
-        self.cr_sample_ml_value.clear()
+        self.sample_values['ref_id'][self.index].clear()
+        self.sample_values['grams'][self.index].clear()
+        self.sample_values['ml'][self.index].clear()
 
 
     def hide_sample_calculations(self):
-        self.cr_SampleCalculations.setVisible(False)
-        self.cr_sample_tableWidget.setVisible(False)
-        self.cr_save_button.setVisible(False)
-        self.splitter_7.setVisible(False)
+        self.sample_cal_labels[self.index].setVisible(False)
+        self.sample_table_widgets[self.index].setVisible(False)
+        self.sample_save_buttons[self.index].setVisible(False)
+        self.splitters[self.index].setVisible(False)
 
 
 
     def show_sample_calculations(self):
-        self.cr_SampleCalculations.setVisible(True)
-        self.cr_sample_tableWidget.setVisible(True)
-        self.cr_save_button.setVisible(True)
-        self.splitter_7.setVisible(True)
+        self.sample_cal_labels[self.index].setVisible(True)
+        self.sample_table_widgets[self.index].setVisible(True)
+        self.sample_save_buttons[self.index].setVisible(True)
+        self.splitters[self.index].setVisible(True)
 
     def update_grams_field(self):
         text = self.values['grams'][self.index].text()
