@@ -42,6 +42,8 @@ class FeroChromeAnalysis:
             self.know_sample_results.append([
                             sample, grams, ml, round(self.known_samples[sample]['Factor'] , 6), round(percent_cr, 2), known_value, round(bias, 2)
                         ])
+            
+            return self.know_sample_results
     
     def add_and_calculate_sample(self, ref_id, grams, ml):
         if not self.factor_average:

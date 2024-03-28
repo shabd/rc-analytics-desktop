@@ -1,6 +1,5 @@
 from PyQt6.QtCore import Qt
-from PyQt6 import QtCore, QtGui, QtWidgets
-from PyQt6.QtWidgets import QMainWindow, QMessageBox, QTableWidgetItem
+from PyQt6.QtWidgets import QApplication,QMainWindow, QMessageBox, QTableWidgetItem
 from PyQt6.QtGui import QPalette,QDoubleValidator
 
 from rc_ui import Ui_MainWindow
@@ -26,31 +25,28 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.table_widgets=[]
         self.init_table_widgets()
 
+        self.values = {}
+        self.labels = {}
+        self.init_values_labels()
+
+        self.sample_info_labels = [self.cr_sample_info,self.FeSampleInfo,self.label]
 
         self.index = 0
-        self.current_analysis = self.analysis[self.index]
-        self.current_table = self.table_widgets[self.index]
         self.init_tab()
+
+        self.connect_next_buttons()
         
-        self.cr_factor_next_button.clicked.connect(self.factor_results)
-        self.cr_sample_next_button.clicked.connect(self.sample_results)  # Assuming addButton is the name of your "Add" button
+        
 
         self.hide_sample_calculations()
-        self.cr_factor_grams_value.textChanged.connect(self.update_grams_field)
-        self.cr_factor_ml_value.textChanged.connect(self.update_ml_field)
-        self.cr_factor_know_value.textChanged.connect(self.update_know_field)
+        # these shouldnot be like this , they should be like buttons
 
-        validator = QDoubleValidator()
-        self.cr_factor_grams_value.setValidator(validator)
-        self.cr_factor_ml_value.setValidator(validator)
-        self.cr_factor_know_value.setValidator(validator)
+        self.set_on_text_changed()
+
 
 
     def on_tab_changed(self,index):
-        # print(index)
         self.index = index
-        self.current_analysis = self.analysis[index]
-        self.current_table = self.table_widgets[index]
         self.init_tab()
 
 
@@ -70,6 +66,41 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.table_widgets.append(self.cr_factor_TableWidget)
         self.table_widgets.append(self.FeFactorTableWidget)
         self.table_widgets.append(self.IronTableWidget)
+
+
+    def init_values_labels(self):
+        self.values['grams']=[self.cr_factor_grams_value, self.fe_factor_grams_value,self.factor_grams_value]  
+        self.values['ml'] = [self.cr_factor_ml_value,self.fe_factor_ml_value,self.factor_ml_value]     
+        self.values['know'] = [ self.cr_factor_know_value,self.fe_factor_know_value,self.factor_know_value]
+
+        self.labels['grams'] =[self.cr_factor_grams_text,self.fe_factor_grams_text,self.iron_factor_grams_text]
+        self.labels['ml']=[self.cr_factor_ml_text,self.fe_factor_ml_text,self.iron_factor_ml_text]
+        self.labels['know'] = [self.cr_factor_know_value_text,self.fe_factor_know_value_text,self.iron_factor_know_value_text]
+
+    
+
+
+    def connect_next_buttons(self):
+        self.cr_factor_next_button.clicked.connect(self.factor_results)
+        self.cr_sample_next_button.clicked.connect(self.sample_results) 
+        self.fe_factor_next_button.clicked.connect(self.factor_results)
+        self.fe_sample_next_button.clicked.connect(self.sample_results)
+        self.iron_factor_next_button.clicked.connect(self.factor_results)
+        self.iron_sample_next_button.clicked.connect(self.sample_results)
+
+    def set_on_text_changed(self):
+        self.cr_factor_grams_value.textChanged.connect(self.update_grams_field)
+        self.fe_factor_grams_value.textChanged.connect(self.update_grams_field)
+        self.factor_grams_value.textChanged.connect(self.update_grams_field)
+
+        self.cr_factor_ml_value.textChanged.connect(self.update_ml_field)
+        self.fe_factor_ml_value.textChanged.connect(self.update_ml_field)
+        self.factor_ml_value.textChanged.connect(self.update_ml_field)
+
+        self.cr_factor_know_value.textChanged.connect(self.update_know_field)
+        self.fe_factor_know_value.textChanged.connect(self.update_know_field)
+        self.factor_know_value.textChanged.connect(self.update_know_field)
+
         
         
     def showError(self, message):
@@ -77,9 +108,9 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         
         
     def populate_known_samples_table(self):
-        self.current_table.setRowCount(len(self.current_analysis.known_samples))
-        for row, sample_name in enumerate(self.current_analysis.known_samples.keys()):
-            self.current_table.setItem(row, 0, QtWidgets.QTableWidgetItem(sample_name))
+        self.table_widgets[self.index].setRowCount(len(self.analysis[self.index].known_samples))
+        for row, sample_name in enumerate(self.analysis[self.index].known_samples.keys()):
+            self.table_widgets[self.index].setItem(row, 0, QTableWidgetItem(sample_name))
     
     
     def change_next_into_clear_button(self):
@@ -93,31 +124,31 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.cr_factor_next_button.clicked.connect(self.clear_all_data)
                 
     def update_sample_info_label(self):
-        if self.current_sample_index < len(self.current_analysis.known_samples):
-            sample_name = list(self.current_analysis.known_samples.keys())[self.current_sample_index]
-            self.cr_sample_info.setText(f"Current Sample: {sample_name}")
+        if self.current_sample_index < len(self.analysis[self.index].known_samples):
+            sample_name = list(self.analysis[self.index].known_samples.keys())[self.current_sample_index]
+            self.sample_info_labels[self.index].setText(f"Current Sample: {sample_name}")
         else:
-            self.cr_sample_info.setText("All samples processed.")
+            self.sample_info_labels[self.index].setText("All samples processed.")
             
-    def factor_results(self):
+    def factor_results(self): 
         # self.check_not_empty() # check texts are not empty first
-        grams = float(self.cr_factor_grams_value.text())
-        ml = float(self.cr_factor_ml_value.text())
-        known_value = float(self.cr_factor_know_value.text())
+        grams = float(self.values['grams'][self.index].text())
+        ml = float(self.values['ml'][self.index].text())
+        known_value = float(self.values['know'][self.index].text())
 
         # Validate input before proceeding
         if not grams or not ml or not known_value:
             QMessageBox.warning(self, "Input Error", "Please fill in all fields.")
             return
 
-        sample_name = list(self.current_analysis.known_samples.keys())[self.current_sample_index]
+        sample_name = list(self.analysis[self.index].known_samples.keys())[self.current_sample_index]
         self.currentSampleValues[sample_name] = (grams, ml, known_value)
 
         # Prepare for the next sample or finish
         self.current_sample_index += 1
-        if self.current_sample_index >= len(self.current_analysis.known_samples):
+        if self.current_sample_index >= len(self.analysis[self.index].known_samples):
             # Since calculate_factors expects a dictionary, now we pass self.currentSampleValues directly
-            chrom_calculated_values = self.current_analysis.calculate_factors(self.currentSampleValues)
+            chrom_calculated_values = self.analysis[self.index].calculate_factors(self.currentSampleValues)
             self.display_results_in_table(chrom_calculated_values)
             
             bias_violation = False
@@ -136,16 +167,16 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             self.change_next_into_clear_button()
         else:
             # Reset fields for the next sample
-            self.cr_factor_grams_value.clear()
-            self.cr_factor_ml_value.clear()
-            self.cr_factor_know_value.clear()
+            self.values['grams'][self.index].clear()
+            self.values['ml'][self.index].clear()
+            self.values['know'][self.index].clear()
             self.update_sample_info_label()
     
     def display_results_in_table(self, results):
-        self.current_table.setRowCount(len(results))  # Assuming resultsTable is your QTableWidget
+        self.table_widgets[self.index].setRowCount(len(results))  # Assuming resultsTable is your QTableWidget
         for row, sample in enumerate(results):
             for col, data in enumerate(sample):
-                self.current_table.setItem(row, col, QtWidgets.QTableWidgetItem(str(data)))
+                self.table_widgets[self.index].setItem(row, col, QTableWidgetItem(str(data)))
 
     
     def lock_sample_table(self):
@@ -159,12 +190,12 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             
     def hide_inputs_and_calculate(self):
         # Hide UI elements
-        self.cr_factor_grams_text.hide()
-        self.cr_factor_grams_value.hide()
-        self.cr_factor_ml_text.hide()
-        self.cr_factor_ml_value.hide()
-        self.cr_factor_know_value_text.hide()
-        self.cr_factor_know_value.hide()
+        self.labels['grams'][self.index].hide()
+        self.values['grams'][self.index].hide()
+        self.labels['ml'][self.index].hide()
+        self.values['ml'][self.index].hide()
+        self.labels['know'][self.index].hide()
+        self.values['know'][self.index].hide()
     
     def reset_current_state(self):
         # self.chromeAnalysis = ChromeOreAnalysis()
@@ -175,12 +206,12 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
     
     def show_all_factor_text_value(self):
-        self.cr_factor_grams_text.show()
-        self.cr_factor_grams_value.show()
-        self.cr_factor_ml_text.show()
-        self.cr_factor_ml_value.show()
-        self.cr_factor_know_value_text.show()
-        self.cr_factor_know_value.show()
+        self.labels['grams'][self.index].show()
+        self.values['grams'][self.index].show()
+        self.labels['ml'][self.index].show()
+        self.values['ml'][self.index].show()
+        self.labels['know'][self.index].show()
+        self.values['know'][self.index].show()
         
     def clear_all_data(self):
    
@@ -191,8 +222,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.cr_factor_next_button.clicked.disconnect()
         self.cr_factor_next_button.clicked.connect(self.factor_results)
         # Optionally, clear any displayed results in your table
-        self.current_table.clearContents()
-        self.current_table.setRowCount(0)
+        self.table_widgets[self.index].clearContents()
+        self.table_widgets[self.index].setRowCount(0)
         # Reset the UI to its initial state if needed
         
         self.cr_sample_tableWidget.clearContents()
@@ -215,15 +246,15 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             ml_float = float(ml)
         except ValueError:
             # Handle invalid input (e.g., show an error message)
-            QtWidgets.QMessageBox.warning(self, "Input Error", "Please enter valid numbers for grams and ml.")
+            QMessageBox.warning(self, "Input Error", "Please enter valid numbers for grams and ml.")
             return
 
         # Call add_and_calculate_sample with the collected data
         try:
-            updated_samples = self.current_analysis.add_and_calculate_sample(sample_id, grams_float, ml_float)
+            updated_samples = self.analysis[self.index].add_and_calculate_sample(sample_id, grams_float, ml_float)
         except ValueError as e:
             # Handle the case where factor_average has not been calculated
-            QtWidgets.QMessageBox.warning(self, "Calculation Error", str(e))
+            QMessageBox.warning(self, "Calculation Error", str(e))
             return
 
         # Assuming the last entry in updated_samples is the one we just added
@@ -234,7 +265,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         rowPosition = self.cr_sample_tableWidget.rowCount()
         self.cr_sample_tableWidget.insertRow(rowPosition)
         for col, item in enumerate(last_entry):
-            self.cr_sample_tableWidget.setItem(rowPosition, col, QtWidgets.QTableWidgetItem(str(item)))
+            self.cr_sample_tableWidget.setItem(rowPosition, col, QTableWidgetItem(str(item)))
 
         # Optionally, clear the input fields after adding the data to the table
         self.cr_sample_ref_id_value.clear()
@@ -257,23 +288,23 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.splitter_7.setVisible(True)
 
     def update_grams_field(self):
-        text = self.cr_factor_grams_value.text()
-        self.current_table.setItem(self.current_sample_index, 1, QtWidgets.QTableWidgetItem(text))
+        text = self.values['grams'][self.index].text()
+        self.table_widgets[self.index].setItem(self.current_sample_index, 1, QTableWidgetItem(text))
 
         
 
     def update_ml_field(self):
-        text = self.cr_factor_ml_value.text()
-        self.current_table.setItem(self.current_sample_index, 2, QtWidgets.QTableWidgetItem(text))
+        text = self.values['ml'][self.index].text()
+        self.table_widgets[self.index].setItem(self.current_sample_index, 2, QTableWidgetItem(text))
 
 
     def update_know_field(self):
-        text = self.cr_factor_know_value.text()
-        self.current_table.setItem(self.current_sample_index, 5, QtWidgets.QTableWidgetItem(text))
+        text = self.values['know'][self.index].text()
+        self.table_widgets[self.index].setItem(self.current_sample_index, 5, QTableWidgetItem(text))
 
                         
 if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     window = LabSystem()
     window.show()
     sys.exit(app.exec())

@@ -299,3 +299,9 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
         # Build the PDF
         doc.build(elements)
+
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    window = LabSystem()
+    window.show()
+    sys.exit(app.exec())
