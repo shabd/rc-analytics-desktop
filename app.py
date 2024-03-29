@@ -20,16 +20,6 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.show()
-        self.cr_factor_display.setSegmentStyle(QLCDNumber.SegmentStyle.Flat)
-        self.cr_factor_display.setStyleSheet("QLCDNumber { color: red; }")
-
-        self.fe_factor_display.setSegmentStyle(QLCDNumber.SegmentStyle.Flat)
-        self.fe_factor_display.setStyleSheet("QLCDNumber { color: red; }")
-
-        self.factor_display.setSegmentStyle(QLCDNumber.SegmentStyle.Flat)
-        self.factor_display.setStyleSheet("QLCDNumber { color: red; }")
-
-
 
         self.KnownValue.currentChanged.connect(self.on_tab_changed)
 
@@ -58,6 +48,13 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.sample_save_buttons = [self.cr_save_button,self.fe_save_button,self.IronSaveButton]
 
         self.sample_next_buttons = [self.cr_sample_next_button,self.fe_sample_next_button,self.iron_sample_next_button]
+
+        self.factor_displays = [self.cr_factor_display,self.fe_factor_display,self.factor_display]
+        for display in self.factor_displays:
+            display.setSegmentStyle(QLCDNumber.SegmentStyle.Flat)
+            display.setStyleSheet("QLCDNumber { color: red; }")
+
+
 
         self.index = 0
         self.init_tab()
@@ -212,7 +209,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
                     break
             if not bias_violation:
                 self.show_sample_calculations() # show the second step table
-                self.unlock_sample_table()
+                self.unlock_sample_table() # don't need lock and unlock 
+                self.update_factor_display()
             
             self.hide_inputs_and_calculate()
             self.change_next_into_clear_button()
@@ -231,7 +229,13 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             for col, data in enumerate(sample):
                 self.table_widgets[self.index].setItem(row, col, QTableWidgetItem(str(data)))
 
-    
+    def update_factor_display(self):
+        factor_average = self.analysis[self.index].factor_average
+        self.factor_displays[self.index].display(factor_average)
+
+    def clear_display(self):
+        self.factor_displays[self.index].display(0)
+
     def lock_sample_table(self):
         self.sample_table_widgets[self.index].setDisabled(True)
         self.sample_next_buttons[self.index].setDisabled(True)
@@ -288,6 +292,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     
         self.unlock_sample_table() # no need for locking
         self.hide_sample_calculations()
+
+        self.clear_display()
     
     def sample_results(self):
         # Collect the input data
