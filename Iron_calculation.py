@@ -57,13 +57,16 @@ class IronAnalysis:
             
         return self.know_sample_results
     
-    def add_and_calculate_sample(self, ref_id, grams, ml):
+    def add_and_calculate_sample(self, ref_id, grams, ml,edit=False,index=None):
         if not self.factor_average:
             raise ValueError("Average factor has not been calculated. Please run calculate_factors first.")
 
         cal_percent_fe = (self.factor_average * ml) / grams * 100
         calc_Fe0 = cal_percent_fe * self.FeO_constant
-        self.tested_samples.append([ref_id, float(grams), ml, round(cal_percent_fe, 2), round(calc_Fe0, 2)])
+        if edit:
+            self.tested_samples[index] = [ref_id, float(grams), ml, round(cal_percent_fe, 2), round(calc_Fe0, 2)]
+        else:
+            self.tested_samples.append([ref_id, float(grams), ml, round(cal_percent_fe, 2), round(calc_Fe0, 2)])
 
         return self.tested_samples
    

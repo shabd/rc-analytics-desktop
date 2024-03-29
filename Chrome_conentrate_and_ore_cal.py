@@ -49,13 +49,16 @@ class ChromeOreAnalysis:
         print(self.known_samples)
         return self.know_sample_results
             
-    def add_and_calculate_sample(self, ref_id, grams, ml):
+    def add_and_calculate_sample(self, ref_id, grams, ml,edit=False,index=None):
         if not self.factor_average:
             raise ValueError("Average factor has not been calculated. Please run calculate_factors first.")
 
         cal_percent_cr = (self.factor_average * ml) / grams * 100
         calc_cr2o3 = cal_percent_cr * self.CR2O3_constant
-        self.tested_samples.append([ref_id, float(grams), ml, round(cal_percent_cr, 2), round(calc_cr2o3, 2)])
+        if edit:
+            self.tested_samples[index] = [ref_id, float(grams), ml, round(cal_percent_cr, 2), round(calc_cr2o3, 2)]
+        else:
+            self.tested_samples.append([ref_id, float(grams), ml, round(cal_percent_cr, 2), round(calc_cr2o3, 2)])
 
         return self.tested_samples
    

@@ -1,5 +1,5 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QApplication,QMainWindow, QMessageBox, QTableWidgetItem,QLCDNumber
+from PyQt6.QtWidgets import QApplication,QMainWindow, QMessageBox, QTableWidgetItem,QLCDNumber,QTableWidget
 from PyQt6.QtGui import QPalette,QDoubleValidator
 
 from rc_ui import Ui_MainWindow
@@ -44,6 +44,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.factor_next_buttons = [self.cr_factor_next_button,self.fe_factor_next_button,self.iron_factor_next_button]
 
         self.sample_table_widgets = [self.cr_sample_tableWidget,self.fe_tableWidget,self.IronSampleTable]
+        for table in self.sample_table_widgets:
+            table.cellChanged.connect(self.sample_item_changed)
 
         self.sample_save_buttons = [self.cr_save_button,self.fe_save_button,self.IronSaveButton]
 
@@ -63,13 +65,6 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.connect_save_buttons()
         
         self.set_on_text_changed()
-
-        #QDoubleValidator
-        # validator = QDoubleValidator()
-        # self.cr_factor_grams_value.setValidator(validator)
-        # self.cr_factor_ml_value.setValidator(validator)
-        # self.cr_factor_know_value.setValidator(validator)
-
 
 
     def on_tab_changed(self,index):
@@ -145,6 +140,38 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.cr_factor_know_value.textChanged.connect(self.update_know_field)
         self.fe_factor_know_value.textChanged.connect(self.update_know_field)
         self.factor_know_value.textChanged.connect(self.update_know_field)
+
+    def sample_item_changed(self,row,col):
+        if col in (0, 1, 2):  # Check if edited column is 1 (grams) or 2 (ml)
+            self.update_row_values(row)
+
+    def update_row_values(self,row):
+        try:
+            try:
+                sample_id = self.sample_table_widgets[self.index].item(row, 0).text()
+                grams_text = self.sample_table_widgets[self.index].item(row, 1).text()
+                ml_text = self.sample_table_widgets[self.index].item(row, 2).text()
+            except: # means table is not populated yet so no need to go through this function..
+                return
+
+            grams_float = float(grams_text)
+            ml_float = float(ml_text)
+            edit = True
+            
+            updated_samples = self.analysis[self.index].add_and_calculate_sample(sample_id, grams_float, ml_float,edit,row)
+            last_entry = updated_samples[row]
+
+            self.sample_table_widgets[self.index].setItem(row, 3, QTableWidgetItem(str(last_entry[3])))  # cal_percent_cr
+            # Make columns 3 and 4 non-editable
+            # self.sample_table_widgets[self.index].item(row, 3).setFlags(Qt.ItemFlag.ItemIsEnabled)
+
+            if self.index != 1:
+                self.sample_table_widgets[self.index].setItem(row, 4, QTableWidgetItem(str(last_entry[4])))  
+
+
+        except ValueError:
+            QMessageBox.warning(self, "Input Error", "Please enter valid numbers for grams and ml.")
+
 
         
         
@@ -327,6 +354,13 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.sample_table_widgets[self.index].insertRow(rowPosition)
         for col, item in enumerate(last_entry):
             self.sample_table_widgets[self.index].setItem(rowPosition, col, QTableWidgetItem(str(item)))
+        # make them not editable
+        self.sample_table_widgets[self.index].item(rowPosition, 3).setFlags(Qt.ItemFlag.ItemIsEnabled)
+        if self.index != 1:
+            self.sample_table_widgets[self.index].item(rowPosition, 4).setFlags(Qt.ItemFlag.ItemIsEnabled)  # Column 4 (calc_cr2o3)
+
+
+
 
         # Optionally, clear the input fields after adding the data to the table
         self.sample_values['ref_id'][self.index].clear()
@@ -365,56 +399,62 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.table_widgets[self.index].setItem(self.current_sample_index, 5, QTableWidgetItem(text))
 
     def saveTablesToPDF(self, filename="table_data_test.pdf"):
-        doc = SimpleDocTemplate(filename, pagesize=letter)
-        elements = []
+        try:
+            doc = SimpleDocTemplate(filename, pagesize=letter)
+            elements = []
 
-        # Prepare data for the Factors Table
-        factors_data = [[["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias"]],
-                        [["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias"]],
-                        [["Sample Name", "Grams", "Ml", "Known %", "Factor", "%Fe", "Bias", "%FeO"]]]
+            # Prepare data for the Factors Table
+            factors_data = [[["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias"]],
+                            [["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias"]],
+                            [["Sample Name", "Grams", "Ml", "Known %", "Factor", "%Fe", "Bias", "%FeO"]]]
 
-        for row in range(self.table_widgets[self.index].rowCount()):
-            names_of_samples = list(self.analysis[self.index].known_samples.keys())
-            row_data = [names_of_samples[row]]  # Start each row with the sample name
-            for col in range(self.table_widgets[self.index].columnCount()):
-                item = self.table_widgets[self.index].item(row, col)
-                row_data.append(item.text() if item else "")
-            factors_data[self.index].append(row_data)
+            for row in range(self.table_widgets[self.index].rowCount()):
+                # names_of_samples = list(self.analysis[self.index].known_samples.keys())
+                # row_data = [names_of_samples[row]]  # Start each row with the sample name
+                row_data=[]
+                for col in range(self.table_widgets[self.index].columnCount()):
+                    item = self.table_widgets[self.index].item(row, col)
+                    row_data.append(item.text() if item else "")
+                factors_data[self.index].append(row_data)
 
-        # Add the Factors Table to the elements
-        factors_table = Table(factors_data[self.index])
-        factors_table.setStyle(TableStyle([
-            ('BACKGROUND', (0,0), (-1,0), colors.grey),
-            ('GRID', (0,0), (-1,-1), 1, colors.black),
-            ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke)
-        ]))
-        elements.append(factors_table)
-        
-        # Adding a space between tables
-        elements.append(Table([[""]], colWidths=[doc.width]))
-        
-        # Prepare data for the Sample Table
-        sample_data = [[["Ref ID", "Grams", "Ml", "Cal % CR"]],
-                       [["Ref ID", "Grams", "Ml", "Cal % CR"]],
-                       [["Ref ID", "Grams", "Ml", "%Fe", "%FeO"]]]
-        for row in range(self.sample_table_widgets[self.index].rowCount()):
-            row_data = []
-            for col in range(self.sample_table_widgets[self.index].columnCount()):
-                item = self.sample_table_widgets[self.index].item(row, col)
-                row_data.append(item.text() if item else "")
-            sample_data[self.index].append(row_data)
+            # Add the Factors Table to the elements
+            factors_table = Table(factors_data[self.index])
+            factors_table.setStyle(TableStyle([
+                ('BACKGROUND', (0,0), (-1,0), colors.grey),
+                ('GRID', (0,0), (-1,-1), 1, colors.black),
+                ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke)
+            ]))
+            elements.append(factors_table)
+            
+            # Adding a space between tables
+            elements.append(Table([[""]], colWidths=[doc.width]))
+            
+            # Prepare data for the Sample Table
+            sample_data = [[["Ref ID", "Grams", "Ml", "Cal % CR","% Calc Cr2O3"]],
+                        [["Ref ID", "Grams", "Ml", "Cal % CR"]],
+                        [["Ref ID", "Grams", "Ml", "%Fe", "%FeO"]]]
+            for row in range(self.sample_table_widgets[self.index].rowCount()):
+                row_data = []
+                for col in range(self.sample_table_widgets[self.index].columnCount()):
+                    item = self.sample_table_widgets[self.index].item(row, col)
+                    row_data.append(item.text() if item else "")
+                sample_data[self.index].append(row_data)
 
-        # Add the Sample Table to the elements
-        sample_table = Table(sample_data[self.index])
-        sample_table.setStyle(TableStyle([
-            ('BACKGROUND', (0,0), (-1,0), colors.grey),
-            ('GRID', (0,0), (-1,-1), 1, colors.black),
-            ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke)
-        ]))
-        elements.append(sample_table)
-        print(filename)
-        # Build the PDF
-        doc.build(elements)
+            # Add the Sample Table to the elements
+            sample_table = Table(sample_data[self.index])
+            sample_table.setStyle(TableStyle([
+                ('BACKGROUND', (0,0), (-1,0), colors.grey),
+                ('GRID', (0,0), (-1,-1), 1, colors.black),
+                ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke)
+            ]))
+            elements.append(sample_table)
+            # Build the PDF
+            doc.build(elements)
+            QMessageBox.information(self, "Success", f"Data saved successfully to {filename}!")
+        except:
+            QMessageBox.warning(self, "Error in Saving PDF", "Please close the previous pdf if opened")
+
+
 
 
 

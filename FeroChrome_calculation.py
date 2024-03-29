@@ -44,14 +44,19 @@ class FeroChromeAnalysis:
                             sample, grams, ml, round(self.known_samples[sample]['Factor'] , 6), round(percent_cr, 2), known_value, round(bias, 2)
                         ])
             
-            return self.know_sample_results
+        return self.know_sample_results
     
-    def add_and_calculate_sample(self, ref_id, grams, ml):
+    def add_and_calculate_sample(self, ref_id, grams, ml,edit=False,index=None):
         if not self.factor_average:
             raise ValueError("Average factor has not been calculated. Please run calculate_factors first.")
 
         cal_percent_cr = (self.factor_average * ml) / grams * 100
-        self.tested_samples.append([ref_id, float(grams), ml, round(cal_percent_cr, 2)])
+        if edit:
+            self.tested_samples[index] = [ref_id, float(grams), ml, round(cal_percent_cr, 2)]
+        else:
+            self.tested_samples.append([ref_id, float(grams), ml, round(cal_percent_cr, 2)])
+        return self.tested_samples
+
 
 
 # analysis = FeroChromeAnalysis()
