@@ -1,5 +1,5 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QApplication,QMainWindow, QMessageBox, QTableWidgetItem
+from PyQt6.QtWidgets import QApplication,QMainWindow, QMessageBox, QTableWidgetItem,QLCDNumber
 from PyQt6.QtGui import QPalette,QDoubleValidator
 
 from rc_ui import Ui_MainWindow
@@ -9,12 +9,26 @@ from Iron_calculation import IronAnalysis
 
 import sys
 
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.pdfgen import canvas
+
 
 class LabSystem(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.show()
+        self.cr_factor_display.setSegmentStyle(QLCDNumber.SegmentStyle.Flat)
+        self.cr_factor_display.setStyleSheet("QLCDNumber { color: red; }")
+
+        self.fe_factor_display.setSegmentStyle(QLCDNumber.SegmentStyle.Flat)
+        self.fe_factor_display.setStyleSheet("QLCDNumber { color: red; }")
+
+        self.factor_display.setSegmentStyle(QLCDNumber.SegmentStyle.Flat)
+        self.factor_display.setStyleSheet("QLCDNumber { color: red; }")
+
 
 
         self.KnownValue.currentChanged.connect(self.on_tab_changed)
@@ -49,10 +63,15 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.init_tab()
 
         self.connect_next_buttons()
+        self.connect_save_buttons()
         
         self.set_on_text_changed()
 
         #QDoubleValidator
+        # validator = QDoubleValidator()
+        # self.cr_factor_grams_value.setValidator(validator)
+        # self.cr_factor_ml_value.setValidator(validator)
+        # self.cr_factor_know_value.setValidator(validator)
 
 
 
@@ -112,6 +131,11 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.iron_factor_next_button.clicked.connect(self.factor_results)
         self.iron_sample_next_button.clicked.connect(self.sample_results)
 
+    def connect_save_buttons(self):
+        self.cr_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_cr.pdf"))
+        self.fe_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_fe.pdf"))
+        self.IronSaveButton.clicked.connect(lambda: self.saveTablesToPDF("table_data_iron.pdf"))
+
     def set_on_text_changed(self):
         self.cr_factor_grams_value.textChanged.connect(self.update_grams_field)
         self.fe_factor_grams_value.textChanged.connect(self.update_grams_field)
@@ -146,6 +170,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             pass
         # Connect the clear functionality
         self.factor_next_buttons[self.index].clicked.connect(self.clear_all_data)
+
                 
     def update_sample_info_label(self):
         if self.current_sample_index < len(self.analysis[self.index].known_samples):
@@ -156,13 +181,15 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             
     def factor_results(self): 
         # self.check_not_empty() # check texts are not empty first
-        grams = float(self.values['grams'][self.index].text())
-        ml = float(self.values['ml'][self.index].text())
-        known_value = float(self.values['know'][self.index].text())
+        try:
+            grams = float(self.values['grams'][self.index].text())
+            ml = float(self.values['ml'][self.index].text())
+            known_value = float(self.values['know'][self.index].text())
+        except:
 
-        # Validate input before proceeding
-        if not grams or not ml or not known_value:
-            QMessageBox.warning(self, "Input Error", "Please fill in all fields.")
+            # Validate input before proceeding
+            # if not grams or not ml or not known_value:
+            QMessageBox.warning(self, "Input Error", "Please fill in all fields with valid values.")
             return
 
         sample_name = list(self.analysis[self.index].known_samples.keys())[self.current_sample_index]
@@ -184,17 +211,19 @@ class LabSystem(QMainWindow, Ui_MainWindow):
                     bias_violation = True
                     break
             if not bias_violation:
-                self.show_sample_calculations()
+                self.show_sample_calculations() # show the second step table
                 self.unlock_sample_table()
             
             self.hide_inputs_and_calculate()
             self.change_next_into_clear_button()
+
         else:
-            # Reset fields for the next sample
-            self.values['grams'][self.index].clear()
-            self.values['ml'][self.index].clear()
-            self.values['know'][self.index].clear()
             self.update_sample_info_label()
+
+        # Reset fields for the next sample
+        self.values['grams'][self.index].clear()
+        self.values['ml'][self.index].clear()
+        self.values['know'][self.index].clear()
     
     def display_results_in_table(self, results):
         self.table_widgets[self.index].setRowCount(len(results))  # Assuming resultsTable is your QTableWidget
@@ -222,10 +251,11 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.values['know'][self.index].hide()
     
     def reset_current_state(self):
-        # self.chromeAnalysis = ChromeOreAnalysis()
         self.init_analysis()
         self.currentSampleValues = {}
         self.current_sample_index = 0
+
+
 
 
     
@@ -256,7 +286,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.populate_known_samples_table()
         self.update_sample_info_label()
     
-        self.unlock_sample_table() 
+        self.unlock_sample_table() # no need for locking
+        self.hide_sample_calculations()
     
     def sample_results(self):
         # Collect the input data
@@ -295,6 +326,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.sample_values['ref_id'][self.index].clear()
         self.sample_values['grams'][self.index].clear()
         self.sample_values['ml'][self.index].clear()
+        
 
 
     def hide_sample_calculations(self):
@@ -325,6 +357,60 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     def update_know_field(self):
         text = self.values['know'][self.index].text()
         self.table_widgets[self.index].setItem(self.current_sample_index, 5, QTableWidgetItem(text))
+
+    def saveTablesToPDF(self, filename="table_data_test.pdf"):
+        doc = SimpleDocTemplate(filename, pagesize=letter)
+        elements = []
+
+        # Prepare data for the Factors Table
+        factors_data = [[["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias"]],
+                        [["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias"]],
+                        [["Sample Name", "Grams", "Ml", "Known %", "Factor", "%Fe", "Bias", "%FeO"]]]
+
+        for row in range(self.table_widgets[self.index].rowCount()):
+            names_of_samples = list(self.analysis[self.index].known_samples.keys())
+            row_data = [names_of_samples[row]]  # Start each row with the sample name
+            for col in range(self.table_widgets[self.index].columnCount()):
+                item = self.table_widgets[self.index].item(row, col)
+                row_data.append(item.text() if item else "")
+            factors_data[self.index].append(row_data)
+
+        # Add the Factors Table to the elements
+        factors_table = Table(factors_data[self.index])
+        factors_table.setStyle(TableStyle([
+            ('BACKGROUND', (0,0), (-1,0), colors.grey),
+            ('GRID', (0,0), (-1,-1), 1, colors.black),
+            ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke)
+        ]))
+        elements.append(factors_table)
+        
+        # Adding a space between tables
+        elements.append(Table([[""]], colWidths=[doc.width]))
+        
+        # Prepare data for the Sample Table
+        sample_data = [[["Ref ID", "Grams", "Ml", "Cal % CR"]],
+                       [["Ref ID", "Grams", "Ml", "Cal % CR"]],
+                       [["Ref ID", "Grams", "Ml", "%Fe", "%FeO"]]]
+        for row in range(self.sample_table_widgets[self.index].rowCount()):
+            row_data = []
+            for col in range(self.sample_table_widgets[self.index].columnCount()):
+                item = self.sample_table_widgets[self.index].item(row, col)
+                row_data.append(item.text() if item else "")
+            sample_data[self.index].append(row_data)
+
+        # Add the Sample Table to the elements
+        sample_table = Table(sample_data[self.index])
+        sample_table.setStyle(TableStyle([
+            ('BACKGROUND', (0,0), (-1,0), colors.grey),
+            ('GRID', (0,0), (-1,-1), 1, colors.black),
+            ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke)
+        ]))
+        elements.append(sample_table)
+        print(filename)
+        # Build the PDF
+        doc.build(elements)
+
+
 
                         
 if __name__ == "__main__":

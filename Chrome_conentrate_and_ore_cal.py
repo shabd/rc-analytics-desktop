@@ -16,6 +16,8 @@ class ChromeOreAnalysis:
         self.CR2O3_constant = 1.4615
         
     def calculate_factors(self, value_dict):
+        self.know_sample_results = []
+
         print(f"value_dict: {value_dict}")
         factors = []
         

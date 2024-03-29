@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>859</width>
-    <height>534</height>
+    <height>597</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -439,6 +439,11 @@
       <column>
        <property name="text">
         <string>Cal % CR</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>% Calc Cr2O3</string>
        </property>
       </column>
      </widget>
@@ -1531,7 +1536,7 @@
      <x>0</x>
      <y>0</y>
      <width>859</width>
-     <height>24</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

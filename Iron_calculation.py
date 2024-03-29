@@ -22,6 +22,8 @@ class IronAnalysis:
         self.FeO_constant = 1.2865
         
     def calculate_factors(self, value_dict):
+        self.know_sample_results = []
+
         print("Calculate factors ", value_dict)
         factors = []
         

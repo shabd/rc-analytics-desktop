@@ -14,7 +14,8 @@ class FeroChromeAnalysis:
         self.know_sample_results = []
     
     def calculate_factors(self, value_dict):
-        
+        self.know_sample_results = []
+
         factors = []
         
         # 1. First calculate all  the factors for CRMS
