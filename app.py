@@ -142,7 +142,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.factor_know_value.textChanged.connect(self.update_know_field)
 
     def sample_item_changed(self,row,col):
-        if col in (0, 1, 2):  # Check if edited column is 1 (grams) or 2 (ml)
+        if col in (0, 1, 2):  # Check if edited column is 1 (grams) or 2 (ml) # add 0 also to edit ref id in 
             self.update_row_values(row)
 
     def update_row_values(self,row):
