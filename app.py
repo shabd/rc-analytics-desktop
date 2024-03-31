@@ -25,6 +25,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
         self.analysis=[] # put the three analysis here 
         self.init_analysis()
+        self.calculated =[False,False,False]
 
         self.table_widgets=[]
         self.init_table_widgets()
@@ -54,7 +55,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.factor_displays = [self.cr_factor_display,self.fe_factor_display,self.factor_display]
         for display in self.factor_displays:
             display.setSegmentStyle(QLCDNumber.SegmentStyle.Flat)
-            display.setStyleSheet("QLCDNumber { color: red; }")
+            display.setStyleSheet("QLCDNumber { color: white;background-color:red }")
 
 
 
@@ -69,7 +70,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
     def on_tab_changed(self,index):
         self.index = index
-        self.init_tab()
+        if  self.calculated[self.index] == False:
+            self.init_tab()
 
 
     def init_tab(self):
@@ -235,6 +237,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
                     bias_violation = True
                     break
             if not bias_violation:
+                self.calculated[self.index]= True
                 self.show_sample_calculations() # show the second step table
                 self.unlock_sample_table() # don't need lock and unlock 
                 self.update_factor_display()
@@ -255,6 +258,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         for row, sample in enumerate(results):
             for col, data in enumerate(sample):
                 self.table_widgets[self.index].setItem(row, col, QTableWidgetItem(str(data)))
+                self.table_widgets[self.index].item(row, col).setFlags(Qt.ItemFlag.ItemIsEnabled)
+
 
     def update_factor_display(self):
         factor_average = self.analysis[self.index].factor_average
@@ -321,6 +326,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.hide_sample_calculations()
 
         self.clear_display()
+        self.calculated[self.index ] = False
     
     def sample_results(self):
         # Collect the input data
@@ -386,17 +392,23 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     def update_grams_field(self):
         text = self.values['grams'][self.index].text()
         self.table_widgets[self.index].setItem(self.current_sample_index, 1, QTableWidgetItem(text))
+        # self.table_widgets[self.index].item(self.current_sample_index, 1).setFlags(Qt.ItemFlag.ItemIsEnabled)
+
 
         
 
     def update_ml_field(self):
         text = self.values['ml'][self.index].text()
         self.table_widgets[self.index].setItem(self.current_sample_index, 2, QTableWidgetItem(text))
+        # self.table_widgets[self.index].item(self.current_sample_index, 2).setFlags(Qt.ItemFlag.ItemIsEnabled)
+
 
 
     def update_know_field(self):
         text = self.values['know'][self.index].text()
         self.table_widgets[self.index].setItem(self.current_sample_index, 5, QTableWidgetItem(text))
+        # self.table_widgets[self.index].item(self.current_sample_index, 5).setFlags(Qt.ItemFlag.ItemIsEnabled)
+
 
     def saveTablesToPDF(self, filename="table_data_test.pdf"):
         try:
