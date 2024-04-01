@@ -2,7 +2,8 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication,QMainWindow, QMessageBox, QTableWidgetItem,QLCDNumber,QTableWidget
 from PyQt6.QtGui import QPalette,QDoubleValidator
 
-from rc_ui import Ui_MainWindow
+# from rc_ui import Ui_MainWindow
+from rc2_ui import Ui_MainWindow
 from Chrome_conentrate_and_ore_cal import ChromeOreAnalysis
 from FeroChrome_calculation import FeroChromeAnalysis
 from Iron_calculation import IronAnalysis
@@ -185,6 +186,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.table_widgets[self.index].setRowCount(len(self.analysis[self.index].known_samples))
         for row, sample_name in enumerate(self.analysis[self.index].known_samples.keys()):
             self.table_widgets[self.index].setItem(row, 0, QTableWidgetItem(sample_name))
+            self.table_widgets[self.index].item(row, 0).setFlags(Qt.ItemFlag.ItemIsEnabled)
+
     
     
     def change_next_into_clear_button(self):
@@ -392,7 +395,10 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     def update_grams_field(self):
         text = self.values['grams'][self.index].text()
         self.table_widgets[self.index].setItem(self.current_sample_index, 1, QTableWidgetItem(text))
-        # self.table_widgets[self.index].item(self.current_sample_index, 1).setFlags(Qt.ItemFlag.ItemIsEnabled)
+        try:
+            self.table_widgets[self.index].item(self.current_sample_index, 1).setFlags(Qt.ItemFlag.ItemIsEnabled)
+        except:
+            pass
 
 
         
@@ -400,14 +406,20 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     def update_ml_field(self):
         text = self.values['ml'][self.index].text()
         self.table_widgets[self.index].setItem(self.current_sample_index, 2, QTableWidgetItem(text))
-        # self.table_widgets[self.index].item(self.current_sample_index, 2).setFlags(Qt.ItemFlag.ItemIsEnabled)
+        try:
+            self.table_widgets[self.index].item(self.current_sample_index, 2).setFlags(Qt.ItemFlag.ItemIsEnabled)
+        except:
+            pass
 
 
 
     def update_know_field(self):
         text = self.values['know'][self.index].text()
         self.table_widgets[self.index].setItem(self.current_sample_index, 5, QTableWidgetItem(text))
-        # self.table_widgets[self.index].item(self.current_sample_index, 5).setFlags(Qt.ItemFlag.ItemIsEnabled)
+        try:
+            self.table_widgets[self.index].item(self.current_sample_index, 5).setFlags(Qt.ItemFlag.ItemIsEnabled)
+        except:
+            pass
 
 
     def saveTablesToPDF(self, filename="table_data_test.pdf"):
