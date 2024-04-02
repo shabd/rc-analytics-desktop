@@ -25,6 +25,9 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
         self.analysis=[] # put the three analysis here 
         self.init_analysis()
+        self.current_sample_index = [0,0,0]
+        self.currentSampleValues = [{},{},{}]
+
         self.calculated =[False,False,False]
 
         self.table_widgets=[]
@@ -70,13 +73,15 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
     def on_tab_changed(self,index):
         self.index = index
-        if  self.calculated[self.index] == False:
+        if self.current_sample_index[self.index] ==0:
             self.init_tab()
+        # if  self.calculated[self.index] == False: # need to add condition of not cleared
+        #     self.init_tab() 
 
 
     def init_tab(self):
-        self.current_sample_index = 0
-        self.currentSampleValues = {}
+        self.current_sample_index[self.index] = 0
+        self.currentSampleValues[self.index] = {}
         self.populate_known_samples_table()
         self.update_sample_info_label()
         self.hide_sample_calculations()
@@ -201,8 +206,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
                 
     def update_sample_info_label(self):
-        if self.current_sample_index < len(self.analysis[self.index].known_samples):
-            sample_name = list(self.analysis[self.index].known_samples.keys())[self.current_sample_index]
+        if self.current_sample_index[self.index] < len(self.analysis[self.index].known_samples):
+            sample_name = list(self.analysis[self.index].known_samples.keys())[self.current_sample_index[self.index]]
             self.sample_info_labels[self.index].setText(f"Current Sample: {sample_name}")
         else:
             self.sample_info_labels[self.index].setText("All samples processed.")
@@ -220,14 +225,14 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             QMessageBox.warning(self, "Input Error", "Please fill in all fields with valid values.")
             return
 
-        sample_name = list(self.analysis[self.index].known_samples.keys())[self.current_sample_index]
-        self.currentSampleValues[sample_name] = (grams, ml, known_value)
+        sample_name = list(self.analysis[self.index].known_samples.keys())[self.current_sample_index[self.index]]
+        self.currentSampleValues[self.index][sample_name] = (grams, ml, known_value)
 
         # Prepare for the next sample or finish
-        self.current_sample_index += 1
-        if self.current_sample_index >= len(self.analysis[self.index].known_samples):
+        self.current_sample_index[self.index] += 1
+        if self.current_sample_index[self.index] >= len(self.analysis[self.index].known_samples):
             # Since calculate_factors expects a dictionary, now we pass self.currentSampleValues directly
-            chrom_calculated_values = self.analysis[self.index].calculate_factors(self.currentSampleValues)
+            chrom_calculated_values = self.analysis[self.index].calculate_factors(self.currentSampleValues[self.index])
             self.display_results_in_table(chrom_calculated_values)
             
             bias_violation = False
@@ -235,13 +240,11 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             # Assuming the bias is the last element in the result list
                 if abs(result[-1]) > 0.5:
                     QMessageBox.warning(self, "Bias Violation", f"Sample '{result[0]}' exceeded the bias tolerance with a bias of {result[-1]}.")
-                    self.lock_sample_table()
                     bias_violation = True
                     break
             if not bias_violation:
                 self.calculated[self.index]= True
                 self.show_sample_calculations() # show the second step table
-                self.unlock_sample_table() # don't need lock and unlock 
                 self.update_factor_display()
             
             self.hide_inputs_and_calculate()
@@ -270,14 +273,6 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     def clear_display(self):
         self.factor_displays[self.index].display(0)
 
-    def lock_sample_table(self):
-        self.sample_table_widgets[self.index].setDisabled(True)
-        self.sample_next_buttons[self.index].setDisabled(True)
-
-    def unlock_sample_table(self):
-        self.sample_table_widgets[self.index].setEnabled(True)
-        self.sample_next_buttons[self.index].setEnabled(True)
-
             
     def hide_inputs_and_calculate(self):
         # Hide UI elements
@@ -290,8 +285,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     
     def reset_current_state(self):
         self.init_analysis()
-        self.currentSampleValues = {}
-        self.current_sample_index = 0
+        self.currentSampleValues[self.index] = {}
+        self.current_sample_index[self.index] = 0
 
 
 
@@ -323,8 +318,6 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         
         self.populate_known_samples_table()
         self.update_sample_info_label()
-    
-        self.unlock_sample_table() # no need for locking
         self.hide_sample_calculations()
 
         self.clear_display()
@@ -393,9 +386,9 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
     def update_grams_field(self):
         text = self.values['grams'][self.index].text()
-        self.table_widgets[self.index].setItem(self.current_sample_index, 1, QTableWidgetItem(text))
+        self.table_widgets[self.index].setItem(self.current_sample_index[self.index], 1, QTableWidgetItem(text))
         try:
-            self.table_widgets[self.index].item(self.current_sample_index, 1).setFlags(Qt.ItemFlag.ItemIsEnabled)
+            self.table_widgets[self.index].item(self.current_sample_index[self.index], 1).setFlags(Qt.ItemFlag.ItemIsEnabled)
         except:
             pass
 
@@ -404,9 +397,9 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
     def update_ml_field(self):
         text = self.values['ml'][self.index].text()
-        self.table_widgets[self.index].setItem(self.current_sample_index, 2, QTableWidgetItem(text))
+        self.table_widgets[self.index].setItem(self.current_sample_index[self.index], 2, QTableWidgetItem(text))
         try:
-            self.table_widgets[self.index].item(self.current_sample_index, 2).setFlags(Qt.ItemFlag.ItemIsEnabled)
+            self.table_widgets[self.index].item(self.current_sample_index[self.index], 2).setFlags(Qt.ItemFlag.ItemIsEnabled)
         except:
             pass
 
@@ -414,9 +407,9 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
     def update_know_field(self):
         text = self.values['know'][self.index].text()
-        self.table_widgets[self.index].setItem(self.current_sample_index, 5, QTableWidgetItem(text))
+        self.table_widgets[self.index].setItem(self.current_sample_index[self.index], 5, QTableWidgetItem(text))
         try:
-            self.table_widgets[self.index].item(self.current_sample_index, 5).setFlags(Qt.ItemFlag.ItemIsEnabled)
+            self.table_widgets[self.index].item(self.current_sample_index[self.index], 5).setFlags(Qt.ItemFlag.ItemIsEnabled)
         except:
             pass
 
