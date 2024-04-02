@@ -8,7 +8,7 @@ from FeroChrome_calculation import FeroChromeAnalysis
 from Iron_calculation import IronAnalysis
 
 import sys
-
+import time
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
@@ -131,9 +131,9 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.iron_sample_next_button.clicked.connect(self.sample_results)
 
     def connect_save_buttons(self):
-        self.cr_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_cr.pdf"))
-        self.fe_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_fe.pdf"))
-        self.IronSaveButton.clicked.connect(lambda: self.saveTablesToPDF("table_data_iron.pdf"))
+        self.cr_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_cr"))
+        self.fe_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_fe"))
+        self.IronSaveButton.clicked.connect(lambda: self.saveTablesToPDF("table_data_iron"))
 
     def set_on_text_changed(self):
         self.cr_factor_grams_value.textChanged.connect(self.update_grams_field)
@@ -414,9 +414,13 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             pass
 
 
-    def saveTablesToPDF(self, filename="table_data_test.pdf"):
+    def saveTablesToPDF(self, filename):
         try:
-            doc = SimpleDocTemplate(filename, pagesize=letter)
+            current_time = time.strftime("Date_%d-%m-%Y_time_%H-%M-%S")
+            ext=".pdf"
+            final_name = f"{filename}_{current_time}{ext}"
+
+            doc = SimpleDocTemplate(final_name, pagesize=letter)
             elements = []
 
             # Prepare data for the Factors Table
@@ -466,7 +470,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             elements.append(sample_table)
             # Build the PDF
             doc.build(elements)
-            QMessageBox.information(self, "Success", f"Data saved successfully to {filename}!")
+            QMessageBox.information(self, "Success", f"Data saved successfully to {final_name}!")
         except:
             QMessageBox.warning(self, "Error in Saving PDF", "Please close the previous pdf if opened")
 
