@@ -316,66 +316,6 @@
        </property>
       </item>
      </widget>
-     <widget class="QSplitter" name="splitter_6">
-      <property name="geometry">
-       <rect>
-        <x>560</x>
-        <y>20</y>
-        <width>125</width>
-        <height>181</height>
-       </rect>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>125</width>
-        <height>181</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Box</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="opaqueResize">
-       <bool>false</bool>
-      </property>
-      <property name="childrenCollapsible">
-       <bool>false</bool>
-      </property>
-      <widget class="QLabel" name="cr_factor_grams_text">
-       <property name="text">
-        <string>Grams</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="cr_factor_grams_value"/>
-      <widget class="QLabel" name="cr_factor_ml_text">
-       <property name="text">
-        <string>Ml</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="cr_factor_ml_value"/>
-      <widget class="QLabel" name="cr_factor_know_value_text">
-       <property name="text">
-        <string>Known value % </string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="cr_factor_know_value"/>
-      <widget class="QPushButton" name="cr_factor_next_button">
-       <property name="text">
-        <string>Next</string>
-       </property>
-      </widget>
-     </widget>
      <widget class="QLabel" name="cr_sample_info">
       <property name="geometry">
        <rect>
@@ -520,6 +460,88 @@
         <string>Next</string>
        </property>
       </widget>
+     </widget>
+     <widget class="QLabel" name="cr_factor_grams_text">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>20</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Grams</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="cr_factor_grams_value">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>40</y>
+        <width>121</width>
+        <height>27</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="cr_factor_ml_text">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>70</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Ml</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="cr_factor_ml_value">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>90</y>
+        <width>121</width>
+        <height>27</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="cr_factor_know_value_text">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>120</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Known value % </string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="cr_factor_know_value">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>140</y>
+        <width>121</width>
+        <height>27</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="cr_factor_next_button">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>170</y>
+        <width>121</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Next</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="ferro_chrome">
@@ -904,42 +926,6 @@
        <string>Ferro Chrome Sample Calculations</string>
       </property>
      </widget>
-     <widget class="QSplitter" name="splitter">
-      <property name="geometry">
-       <rect>
-        <x>570</x>
-        <y>30</y>
-        <width>121</width>
-        <height>181</height>
-       </rect>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <widget class="QLabel" name="fe_factor_grams_text">
-       <property name="text">
-        <string>Grams</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="fe_factor_grams_value"/>
-      <widget class="QLabel" name="fe_factor_ml_text">
-       <property name="text">
-        <string>Ml</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="fe_factor_ml_value"/>
-      <widget class="QLabel" name="fe_factor_know_value_text">
-       <property name="text">
-        <string>Known value % </string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="fe_factor_know_value"/>
-      <widget class="QPushButton" name="fe_factor_next_button">
-       <property name="text">
-        <string>Next</string>
-       </property>
-      </widget>
-     </widget>
      <widget class="QSplitter" name="splitter_2">
       <property name="geometry">
        <rect>
@@ -975,6 +961,88 @@
         <string>Next</string>
        </property>
       </widget>
+     </widget>
+     <widget class="QLabel" name="fe_factor_grams_text">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>30</y>
+        <width>37</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Grams</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="fe_factor_grams_value">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>50</y>
+        <width>121</width>
+        <height>27</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="fe_factor_ml_text">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>74</y>
+        <width>16</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Ml</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="fe_factor_ml_value">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>96</y>
+        <width>121</width>
+        <height>27</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="fe_factor_know_value_text">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>130</y>
+        <width>92</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Known value % </string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="fe_factor_know_value">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>150</y>
+        <width>121</width>
+        <height>27</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="fe_factor_next_button">
+      <property name="geometry">
+       <rect>
+        <x>570</x>
+        <y>180</y>
+        <width>121</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Next</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="iron">
@@ -1378,8 +1446,8 @@
        <rect>
         <x>570</x>
         <y>50</y>
-        <width>113</width>
-        <height>21</height>
+        <width>121</width>
+        <height>27</height>
        </rect>
       </property>
      </widget>
@@ -1388,8 +1456,8 @@
        <rect>
         <x>570</x>
         <y>100</y>
-        <width>113</width>
-        <height>21</height>
+        <width>121</width>
+        <height>27</height>
        </rect>
       </property>
      </widget>
@@ -1398,8 +1466,8 @@
        <rect>
         <x>570</x>
         <y>150</y>
-        <width>113</width>
-        <height>21</height>
+        <width>121</width>
+        <height>27</height>
        </rect>
       </property>
      </widget>
@@ -1408,7 +1476,7 @@
        <rect>
         <x>570</x>
         <y>180</y>
-        <width>113</width>
+        <width>121</width>
         <height>32</height>
        </rect>
       </property>

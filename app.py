@@ -2,8 +2,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication,QMainWindow, QMessageBox, QTableWidgetItem,QLCDNumber,QTableWidget
 from PyQt6.QtGui import QPalette,QDoubleValidator
 
-# from rc_ui import Ui_MainWindow
-from rc2_ui import Ui_MainWindow
+from rc_ui import Ui_MainWindow
 from Chrome_conentrate_and_ore_cal import ChromeOreAnalysis
 from FeroChrome_calculation import FeroChromeAnalysis
 from Iron_calculation import IronAnalysis
