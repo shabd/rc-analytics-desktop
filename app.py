@@ -470,21 +470,21 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             )))
 
 
-            standard_deviation = self.analysis[self.index].standard_deviation
-            elements.append(Paragraph(f"<b>Factor Standard Deviation: {standard_deviation:.6f}</b>", style=ParagraphStyle(
-                alignment=TA_LEFT,  
-                fontSize=10,   
-                fontName="Helvetica-Bold",
-                name='StandardDeviation'
-            )))
+            # standard_deviation = self.analysis[self.index].standard_deviation
+            # elements.append(Paragraph(f"<b>Factor Standard Deviation: {standard_deviation:.6f}</b>", style=ParagraphStyle(
+            #     alignment=TA_LEFT,  
+            #     fontSize=10,   
+            #     fontName="Helvetica-Bold",
+            #     name='StandardDeviation'
+            # )))
 
-            coefficient_of_variation = self.analysis[self.index].coefficient_of_variation
-            elements.append(Paragraph(f"<b>Factor Standard Deviation Percentage: {coefficient_of_variation:.2f}</b>", style=ParagraphStyle(
-                alignment=TA_LEFT,  
-                fontSize=10,   
-                fontName="Helvetica-Bold",
-                name= 'StandardDeviationPercentage'
-            )))
+            # coefficient_of_variation = self.analysis[self.index].coefficient_of_variation
+            # elements.append(Paragraph(f"<b>Factor Standard Deviation Percentage: {coefficient_of_variation:.2f}</b>", style=ParagraphStyle(
+            #     alignment=TA_LEFT,  
+            #     fontSize=10,   
+            #     fontName="Helvetica-Bold",
+            #     name= 'StandardDeviationPercentage'
+            # )))
 
             elements.append(Table([[""]], colWidths=[doc.width]))
 

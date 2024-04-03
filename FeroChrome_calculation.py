@@ -29,8 +29,8 @@ class FeroChromeAnalysis:
             
         # 2. Get the average 
         self.factor_average = sum(factors)/ len(factors)
-        self.standard_deviation = np.std(factors)
-        self.coefficient_of_variation = (self.standard_deviation / self.factor_average) * 100
+        # self.standard_deviation = np.std(factors)
+        # self.coefficient_of_variation = (self.standard_deviation / self.factor_average) * 100
 
         
         # 3. We need to cal %Cr and the bias 
