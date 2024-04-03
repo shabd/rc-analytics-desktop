@@ -11,7 +11,9 @@ import sys
 import time
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle,Paragraph
+from reportlab.lib.styles import ParagraphStyle, TA_LEFT
+
 from reportlab.pdfgen import canvas
 
 
@@ -416,11 +418,11 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
     def saveTablesToPDF(self, filename):
         try:
-            current_time = time.strftime("Date_%d-%m-%Y_time_%H-%M-%S")
+            current_time = time.strftime("Date_%d-%m-%Y_Time_%H-%M-%S")
             ext=".pdf"
             final_name = f"{filename}_{current_time}{ext}"
 
-            doc = SimpleDocTemplate(final_name, pagesize=letter)
+            doc = SimpleDocTemplate(final_name, pagesize=letter, leftMargin=50)
             elements = []
 
             # Prepare data for the Factors Table
@@ -438,16 +440,65 @@ class LabSystem(QMainWindow, Ui_MainWindow):
                 factors_data[self.index].append(row_data)
 
             # Add the Factors Table to the elements
-            factors_table = Table(factors_data[self.index])
+            factors_table = Table(factors_data[self.index], hAlign='LEFT')
             factors_table.setStyle(TableStyle([
                 ('BACKGROUND', (0,0), (-1,0), colors.grey),
                 ('GRID', (0,0), (-1,-1), 1, colors.black),
                 ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke)
             ]))
+
+            
+            elements.append(Paragraph(f"<b>Factor Calculation Table</b>", style=ParagraphStyle(
+                            alignment=TA_LEFT,  
+                            fontSize=24,   
+                            fontName="Helvetica-Bold",
+                            name='FactorCalculationTable'
+                        )))
+            elements.append(Table([[""]], colWidths=[doc.width]))
+
             elements.append(factors_table)
             
             # Adding a space between tables
             elements.append(Table([[""]], colWidths=[doc.width]))
+
+            factor_average = self.analysis[self.index].factor_average
+            elements.append(Paragraph(f"<b>Factor Average: {factor_average:.6f}</b>", style=ParagraphStyle(
+                alignment=TA_LEFT,  
+                fontSize=10,   
+                fontName="Helvetica-Bold",
+                name='FactorAverage'
+            )))
+
+
+            standard_deviation = self.analysis[self.index].standard_deviation
+            elements.append(Paragraph(f"<b>Factor Standard Deviation: {standard_deviation:.6f}</b>", style=ParagraphStyle(
+                alignment=TA_LEFT,  
+                fontSize=10,   
+                fontName="Helvetica-Bold",
+                name='StandardDeviation'
+            )))
+
+            coefficient_of_variation = self.analysis[self.index].coefficient_of_variation
+            elements.append(Paragraph(f"<b>Factor Standard Deviation Percentage: {coefficient_of_variation:.2f}</b>", style=ParagraphStyle(
+                alignment=TA_LEFT,  
+                fontSize=10,   
+                fontName="Helvetica-Bold",
+                name= 'StandardDeviationPercentage'
+            )))
+
+            elements.append(Table([[""]], colWidths=[doc.width]))
+
+            elements.append(Paragraph(f"<b>Sample Calculation Table</b>", style=ParagraphStyle(
+                            alignment=TA_LEFT,  
+                            fontSize=24,   
+                            fontName="Helvetica-Bold",
+                            name='SampleCalculationTable'
+                        )))
+            
+            elements.append(Table([[""]], colWidths=[doc.width]))
+
+
+
             
             # Prepare data for the Sample Table
             sample_data = [[["Ref ID", "Grams", "Ml", "Cal % CR","% Calc Cr2O3"]],
@@ -461,7 +512,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
                 sample_data[self.index].append(row_data)
 
             # Add the Sample Table to the elements
-            sample_table = Table(sample_data[self.index])
+            sample_table = Table(sample_data[self.index], hAlign='LEFT')
             sample_table.setStyle(TableStyle([
                 ('BACKGROUND', (0,0), (-1,0), colors.grey),
                 ('GRID', (0,0), (-1,-1), 1, colors.black),
@@ -472,7 +523,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             doc.build(elements)
             QMessageBox.information(self, "Success", f"Data saved successfully to {final_name}!")
         except:
-            QMessageBox.warning(self, "Error in Saving PDF", "Please close the previous pdf if opened")
+            QMessageBox.warning(self, "Error in Saving PDF", "An Error Occured during Saving the file , please try again later")
 
 
 

@@ -1,7 +1,4 @@
-from reportlab.lib import colors
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Spacer
-
+import numpy as np
 
 
 class IronAnalysis: 
@@ -37,6 +34,9 @@ class IronAnalysis:
             
         # 2. Get the average 
         self.factor_average = sum(factors)/ len(factors)
+        self.standard_deviation = np.std(factors)
+        self.coefficient_of_variation = (self.standard_deviation / self.factor_average) * 100
+
         
         # 3. We need to cal %Fe and the bias 
         for sample, values in value_dict.items():
