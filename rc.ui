@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>859</width>
-    <height>597</height>
+    <width>1015</width>
+    <height>701</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>821</width>
-      <height>545</height>
+      <width>991</width>
+      <height>581</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -332,8 +332,8 @@
      <widget class="QLabel" name="cr_factor_label_value">
       <property name="geometry">
        <rect>
-        <x>720</x>
-        <y>20</y>
+        <x>920</x>
+        <y>10</y>
         <width>60</width>
         <height>16</height>
        </rect>
@@ -345,7 +345,7 @@
      <widget class="QLCDNumber" name="cr_factor_display">
       <property name="geometry">
        <rect>
-        <x>720</x>
+        <x>920</x>
         <y>40</y>
         <width>64</width>
         <height>23</height>
@@ -386,19 +386,6 @@
         <string>% Calc Cr2O3</string>
        </property>
       </column>
-     </widget>
-     <widget class="QPushButton" name="cr_save_button">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>470</y>
-        <width>113</width>
-        <height>32</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Save</string>
-      </property>
      </widget>
      <widget class="QLabel" name="cr_SampleCalculations">
       <property name="geometry">
@@ -518,6 +505,62 @@
       </property>
       <property name="text">
        <string>Next</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="cr_edit_label">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>10</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Edit Sample</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="cr_sample_combobox">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>40</y>
+        <width>101</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="cr_input_combobox">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>90</y>
+        <width>101</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="cr_edit_input">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>130</y>
+        <width>101</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="ce_edit_button">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>170</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Edit</string>
       </property>
      </widget>
     </widget>
@@ -827,8 +870,8 @@
      <widget class="QLCDNumber" name="fe_factor_display">
       <property name="geometry">
        <rect>
-        <x>720</x>
-        <y>60</y>
+        <x>910</x>
+        <y>40</y>
         <width>64</width>
         <height>23</height>
        </rect>
@@ -837,8 +880,8 @@
      <widget class="QLabel" name="fe_factor_label_text">
       <property name="geometry">
        <rect>
-        <x>720</x>
-        <y>40</y>
+        <x>910</x>
+        <y>10</y>
         <width>60</width>
         <height>16</height>
        </rect>
@@ -876,19 +919,6 @@
         <string>Cal % CR</string>
        </property>
       </column>
-     </widget>
-     <widget class="QPushButton" name="fe_save_button">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>470</y>
-        <width>113</width>
-        <height>32</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Save</string>
-      </property>
      </widget>
      <widget class="QLabel" name="feSampletabletext">
       <property name="geometry">
@@ -996,6 +1026,62 @@
       </property>
       <property name="text">
        <string>Next</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="fe_input_combobox">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>90</y>
+        <width>111</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="fe_edit_input">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>130</y>
+        <width>113</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="fe_sample_combobox">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>40</y>
+        <width>111</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="fe_edit_button">
+      <property name="geometry">
+       <rect>
+        <x>770</x>
+        <y>170</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Edit</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="fe_edit_label">
+      <property name="geometry">
+       <rect>
+        <x>770</x>
+        <y>10</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Edit Sample</string>
       </property>
      </widget>
     </widget>
@@ -1382,19 +1468,6 @@
        <string>Iron Sample Calculations</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="IronSaveButton">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>480</y>
-        <width>113</width>
-        <height>32</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Save</string>
-      </property>
-     </widget>
      <widget class="QLineEdit" name="factor_grams_value">
       <property name="geometry">
        <rect>
@@ -1470,8 +1543,8 @@
      <widget class="QLabel" name="iron_factor_label_vaue">
       <property name="geometry">
        <rect>
-        <x>720</x>
-        <y>30</y>
+        <x>890</x>
+        <y>10</y>
         <width>60</width>
         <height>16</height>
        </rect>
@@ -1483,7 +1556,7 @@
      <widget class="QLCDNumber" name="factor_display">
       <property name="geometry">
        <rect>
-        <x>720</x>
+        <x>900</x>
         <y>50</y>
         <width>64</width>
         <height>23</height>
@@ -1526,7 +1599,76 @@
        </property>
       </widget>
      </widget>
+     <widget class="QComboBox" name="iron_input_combobox">
+      <property name="geometry">
+       <rect>
+        <x>750</x>
+        <y>90</y>
+        <width>111</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="iron_edit_input">
+      <property name="geometry">
+       <rect>
+        <x>750</x>
+        <y>130</y>
+        <width>113</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="iron_sample_combobox">
+      <property name="geometry">
+       <rect>
+        <x>750</x>
+        <y>40</y>
+        <width>111</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="iron_edit_button">
+      <property name="geometry">
+       <rect>
+        <x>760</x>
+        <y>180</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Edit</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="iron_edit_label">
+      <property name="geometry">
+       <rect>
+        <x>770</x>
+        <y>10</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Edit Sample</string>
+      </property>
+     </widget>
     </widget>
+   </widget>
+   <widget class="QPushButton" name="save_button">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>600</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Save</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -1534,7 +1676,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>859</width>
+     <width>1015</width>
      <height>26</height>
     </rect>
    </property>

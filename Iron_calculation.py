@@ -27,7 +27,7 @@ class IronAnalysis:
         
         # 1. First calculate all  the factors for CRMS
         for sample, values in value_dict.items():
-            grams, ml ,_ = values
+            grams, ml  = values
             factor = grams * self.known_samples[sample]['Constant']/ ml
             self.known_samples[sample]['Factor'] = factor
             factors.append(factor)

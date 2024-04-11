@@ -47,6 +47,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.sample_cal_labels = [self.cr_SampleCalculations,self.feSampletabletext,self.SampleCalculations]
         self.splitters =[self.splitter_7,self.splitter_2,self.splitter_5]
         self.init_sample_values_labels()
+        self.init_edit()
 
         self.sample_info_labels = [self.cr_sample_info,self.FeSampleInfo,self.label]
 
@@ -56,7 +57,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         for table in self.sample_table_widgets:
             table.cellChanged.connect(self.sample_item_changed)
 
-        self.sample_save_buttons = [self.cr_save_button,self.fe_save_button,self.IronSaveButton]
+        # self.sample_save_buttons = [self.cr_save_button,self.fe_save_button,self.IronSaveButton]
 
         self.sample_next_buttons = [self.cr_sample_next_button,self.fe_sample_next_button,self.iron_sample_next_button]
 
@@ -71,7 +72,9 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.init_tab()
 
         self.connect_next_buttons()
-        self.connect_save_buttons()
+        self.save_button.clicked.connect(self.saveAllTables)
+
+        # self.connect_save_buttons()
         
         self.set_on_text_changed()
 
@@ -90,6 +93,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.populate_known_samples_table()
         self.update_sample_info_label()
         self.hide_sample_calculations()
+        self.hide_edit()
 
 
 
@@ -126,6 +130,13 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.sample_labels['ml']=[self.cr_sample_ml_text,self.fe_sample_ml_text,self.sample_ml_text]
     
 
+    def init_edit(self):
+        self.edit_labels = [self.cr_edit_label,self.fe_edit_label,self.iron_edit_label]
+        self.sample_comboboxes = [self.cr_sample_combobox,self.fe_sample_combobox,self.iron_sample_combobox]
+        self.input_comboboxes = [self.cr_input_combobox,self.fe_input_combobox,self.iron_input_combobox]
+        self.edit_inputs = [self.cr_edit_input,self.fe_edit_input,self.iron_edit_input]
+        self.edit_buttons = [self.ce_edit_button,self.fe_edit_button,self.iron_edit_button]
+
 
     def connect_next_buttons(self):
         self.cr_factor_next_button.clicked.connect(self.factor_results)
@@ -135,10 +146,11 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.iron_factor_next_button.clicked.connect(self.factor_results)
         self.iron_sample_next_button.clicked.connect(self.sample_results)
 
-    def connect_save_buttons(self):
-        self.cr_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_cr"))
-        self.fe_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_fe"))
-        self.IronSaveButton.clicked.connect(lambda: self.saveTablesToPDF("table_data_iron"))
+
+    # def connect_save_buttons(self):
+    #     self.cr_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_cr"))
+    #     self.fe_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_fe"))
+    #     self.IronSaveButton.clicked.connect(lambda: self.saveTablesToPDF("table_data_iron"))
 
     def set_on_text_changed(self):
         self.cr_factor_grams_value.textChanged.connect(self.update_grams_field)
@@ -257,6 +269,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             
             self.hide_inputs_and_calculate()
             self.change_next_into_clear_button()
+            # self.show_edit()
 
         else:
             self.update_sample_info_label()
@@ -378,19 +391,38 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         
 
 
+    def hide_edit(self):
+        self.edit_labels[self.index].setVisible(False)
+        self.sample_comboboxes[self.index].setVisible(False)
+        self.input_comboboxes[self.index].setVisible(False)
+        self.edit_inputs[self.index].setVisible(False)
+        self.edit_buttons[self.index].setVisible(False)
+
+    
+
+    def show_edit(self):
+        self.edit_labels[self.index].setVisible(True)
+        self.sample_comboboxes[self.index].setVisible(True)
+        self.input_comboboxes[self.index].setVisible(True)
+        self.edit_inputs[self.index].setVisible(True)
+        self.edit_buttons[self.index].setVisible(True)
+
     def hide_sample_calculations(self):
         self.sample_cal_labels[self.index].setVisible(False)
         self.sample_table_widgets[self.index].setVisible(False)
-        self.sample_save_buttons[self.index].setVisible(False)
+        # self.sample_save_buttons[self.index].setVisible(False)
         self.splitters[self.index].setVisible(False)
 
+        self.save_button.setVisible(False)
 
 
     def show_sample_calculations(self):
         self.sample_cal_labels[self.index].setVisible(True)
         self.sample_table_widgets[self.index].setVisible(True)
-        self.sample_save_buttons[self.index].setVisible(True)
+        # self.sample_save_buttons[self.index].setVisible(True)
         self.splitters[self.index].setVisible(True)
+
+        # show save buttons if all 3 tables are calculated!!! TODO
 
     def update_grams_field(self):
         text = self.values['grams'][self.index].text()
@@ -420,6 +452,10 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     #         self.table_widgets[self.index].item(self.current_sample_index[self.index], 5).setFlags(Qt.ItemFlag.ItemIsEnabled)
     #     except:
     #         pass
+
+
+    def saveAllTables(self):
+        pass
 
 
     def saveTablesToPDF(self, filename):
