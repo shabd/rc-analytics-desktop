@@ -563,6 +563,19 @@
        <string>Edit</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="cr_save_button">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>500</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="ferro_chrome">
      <attribute name="title">
@@ -1082,6 +1095,19 @@
       </property>
       <property name="text">
        <string>Edit Sample</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="fe_save_button">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>500</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save</string>
       </property>
      </widget>
     </widget>
@@ -1653,6 +1679,19 @@
       </property>
       <property name="text">
        <string>Edit Sample</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="IronSaveButton">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>500</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save</string>
       </property>
      </widget>
     </widget>

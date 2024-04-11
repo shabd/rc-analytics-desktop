@@ -57,7 +57,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         for table in self.sample_table_widgets:
             table.cellChanged.connect(self.sample_item_changed)
 
-        # self.sample_save_buttons = [self.cr_save_button,self.fe_save_button,self.IronSaveButton]
+        self.sample_save_buttons = [self.cr_save_button,self.fe_save_button,self.IronSaveButton]
 
         self.sample_next_buttons = [self.cr_sample_next_button,self.fe_sample_next_button,self.iron_sample_next_button]
 
@@ -74,7 +74,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.connect_next_buttons()
         self.save_button.clicked.connect(self.saveAllTables)
 
-        # self.connect_save_buttons()
+        self.connect_save_buttons()
         
         self.set_on_text_changed()
 
@@ -147,10 +147,10 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.iron_sample_next_button.clicked.connect(self.sample_results)
 
 
-    # def connect_save_buttons(self):
-    #     self.cr_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_cr"))
-    #     self.fe_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_fe"))
-    #     self.IronSaveButton.clicked.connect(lambda: self.saveTablesToPDF("table_data_iron"))
+    def connect_save_buttons(self):
+        self.cr_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_cr"))
+        self.fe_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_fe"))
+        self.IronSaveButton.clicked.connect(lambda: self.saveTablesToPDF("table_data_iron"))
 
     def set_on_text_changed(self):
         self.cr_factor_grams_value.textChanged.connect(self.update_grams_field)
@@ -410,7 +410,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     def hide_sample_calculations(self):
         self.sample_cal_labels[self.index].setVisible(False)
         self.sample_table_widgets[self.index].setVisible(False)
-        # self.sample_save_buttons[self.index].setVisible(False)
+        self.sample_save_buttons[self.index].setVisible(False)
         self.splitters[self.index].setVisible(False)
 
         self.save_button.setVisible(False)
@@ -419,7 +419,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     def show_sample_calculations(self):
         self.sample_cal_labels[self.index].setVisible(True)
         self.sample_table_widgets[self.index].setVisible(True)
-        # self.sample_save_buttons[self.index].setVisible(True)
+        self.sample_save_buttons[self.index].setVisible(True)
         self.splitters[self.index].setVisible(True)
 
         # show save buttons if all 3 tables are calculated!!! TODO
@@ -470,7 +470,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             # Prepare data for the Factors Table
             factors_data = [[["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias"]],
                             [["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias"]],
-                            [["Sample Name", "Grams", "Ml", "Known %", "Factor", "%Fe", "Bias", "%FeO"]]]
+                            [["Sample Name", "Grams", "Ml", "Factor", "%Fe", "Known %", "Bias", "%FeO"]]]
 
             for row in range(self.table_widgets[self.index].rowCount()):
                 # names_of_samples = list(self.analysis[self.index].known_samples.keys())

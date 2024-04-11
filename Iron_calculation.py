@@ -45,7 +45,7 @@ class IronAnalysis:
             grams, ml = values 
             percent_fe = (self.factor_average *ml)/grams*100
             bias = (percent_fe - self.known_values[i])
-            iron_oxide = percent_fe * self.FeO_constant
+            iron_oxide = self.known_values[i] * self.FeO_constant
             self.known_samples[sample].update({
                 "%Fe": percent_fe,
                 "Known Value" : self.known_values[i],
