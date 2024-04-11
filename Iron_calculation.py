@@ -39,22 +39,24 @@ class IronAnalysis:
         # self.coefficient_of_variation = (self.standard_deviation / self.factor_average) * 100
 
         
+        i=0
         # 3. We need to cal %Fe and the bias 
         for sample, values in value_dict.items():
-            grams, ml, known_value = values 
+            grams, ml = values 
             percent_fe = (self.factor_average *ml)/grams*100
-            bias = (percent_fe - known_value)
+            bias = (percent_fe - self.known_values[i])
             iron_oxide = percent_fe * self.FeO_constant
             self.known_samples[sample].update({
                 "%Fe": percent_fe,
-                "Known Value" : known_value,
+                "Known Value" : self.known_values[i],
                 "Bias": bias,
                 "FeO": iron_oxide,
             })
          
             self.know_sample_results.append([
-                             sample,grams, ml, round(self.known_samples[sample]['Factor'] , 6), round(percent_fe, 2), known_value, round(bias, 2), round(iron_oxide, 2)
+                             sample,grams, ml, round(self.known_samples[sample]['Factor'] , 6), round(percent_fe, 2), self.known_values[i], round(bias, 2), round(iron_oxide, 2)
                         ])
+            i+=1
             
         return self.know_sample_results
     

@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication,QMainWindow, QMessageBox, QTableWidgetItem,QLCDNumber,QTableWidget
-from PyQt6.QtGui import QPalette,QDoubleValidator
+from PyQt6.QtGui import QPalette,QDoubleValidator,QIcon
 
 from rc_ui import Ui_MainWindow
 from Chrome_conentrate_and_ore_cal import ChromeOreAnalysis
@@ -22,6 +22,9 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.show()
+        self.setWindowTitle("RCI Analytical Services")
+        icon = QIcon("Pics/logo.ico")
+        self.setWindowIcon(icon)
 
         self.KnownValue.currentChanged.connect(self.on_tab_changed)
 
@@ -222,7 +225,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         try:
             grams = float(self.values['grams'][self.index].text())
             ml = float(self.values['ml'][self.index].text())
-            known_value = float(self.values['know'][self.index].text())
+            # known_value = float(self.values['know'][self.index].text())
         except:
 
             # Validate input before proceeding
@@ -231,7 +234,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             return
 
         sample_name = list(self.analysis[self.index].known_samples.keys())[self.current_sample_index[self.index]]
-        self.currentSampleValues[self.index][sample_name] = (grams, ml, known_value)
+        self.currentSampleValues[self.index][sample_name] = (grams, ml)#, known_value)
 
         # Prepare for the next sample or finish
         self.current_sample_index[self.index] += 1
@@ -243,7 +246,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             bias_violation = False
             for result in chrom_calculated_values:
             # Assuming the bias is the last element in the result list
-                if abs(result[-1]) > 0.5:
+                if abs(result[6]) > 0.5:
                     QMessageBox.warning(self, "Bias Violation", f"Sample '{result[0]}' exceeded the bias tolerance with a bias of {result[-1]}.")
                     bias_violation = True
                     break
@@ -261,7 +264,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         # Reset fields for the next sample
         self.values['grams'][self.index].clear()
         self.values['ml'][self.index].clear()
-        self.values['know'][self.index].clear()
+        # self.values['know'][self.index].clear()
     
     def display_results_in_table(self, results):
         self.table_widgets[self.index].setRowCount(len(results))  # Assuming resultsTable is your QTableWidget
@@ -285,8 +288,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.values['grams'][self.index].hide()
         self.labels['ml'][self.index].hide()
         self.values['ml'][self.index].hide()
-        self.labels['know'][self.index].hide()
-        self.values['know'][self.index].hide()
+        # self.labels['know'][self.index].hide()
+        # self.values['know'][self.index].hide()
     
     def reset_current_state(self):
         self.init_analysis()
@@ -302,8 +305,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.values['grams'][self.index].show()
         self.labels['ml'][self.index].show()
         self.values['ml'][self.index].show()
-        self.labels['know'][self.index].show()
-        self.values['know'][self.index].show()
+        # self.labels['know'][self.index].show()
+        # self.values['know'][self.index].show()
         
     def clear_all_data(self):
    
@@ -410,13 +413,13 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
 
 
-    def update_know_field(self):
-        text = self.values['know'][self.index].text()
-        self.table_widgets[self.index].setItem(self.current_sample_index[self.index], 5, QTableWidgetItem(text))
-        try:
-            self.table_widgets[self.index].item(self.current_sample_index[self.index], 5).setFlags(Qt.ItemFlag.ItemIsEnabled)
-        except:
-            pass
+    # def update_know_field(self):
+    #     text = self.values['know'][self.index].text()
+    #     self.table_widgets[self.index].setItem(self.current_sample_index[self.index], 5, QTableWidgetItem(text))
+    #     try:
+    #         self.table_widgets[self.index].item(self.current_sample_index[self.index], 5).setFlags(Qt.ItemFlag.ItemIsEnabled)
+    #     except:
+    #         pass
 
 
     def saveTablesToPDF(self, filename):
