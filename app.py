@@ -104,11 +104,11 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     def init_values_labels(self):
         self.values['grams']=[self.cr_factor_grams_value, self.fe_factor_grams_value,self.factor_grams_value]  
         self.values['ml'] = [self.cr_factor_ml_value,self.fe_factor_ml_value,self.factor_ml_value]     
-        self.values['know'] = [ self.cr_factor_know_value,self.fe_factor_know_value,self.factor_know_value]
+        # self.values['know'] = [ self.cr_factor_know_value,self.fe_factor_know_value,self.factor_know_value]
 
         self.labels['grams'] =[self.cr_factor_grams_text,self.fe_factor_grams_text,self.iron_factor_grams_text]
         self.labels['ml']=[self.cr_factor_ml_text,self.fe_factor_ml_text,self.iron_factor_ml_text]
-        self.labels['know'] = [self.cr_factor_know_value_text,self.fe_factor_know_value_text,self.iron_factor_know_value_text]
+        # self.labels['know'] = [self.cr_factor_know_value_text,self.fe_factor_know_value_text,self.iron_factor_know_value_text]
 
 
     def init_sample_values_labels(self):
@@ -146,9 +146,9 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.fe_factor_ml_value.textChanged.connect(self.update_ml_field)
         self.factor_ml_value.textChanged.connect(self.update_ml_field)
 
-        self.cr_factor_know_value.textChanged.connect(self.update_know_field)
-        self.fe_factor_know_value.textChanged.connect(self.update_know_field)
-        self.factor_know_value.textChanged.connect(self.update_know_field)
+        # self.cr_factor_know_value.textChanged.connect(self.update_know_field)
+        # self.fe_factor_know_value.textChanged.connect(self.update_know_field)
+        # self.factor_know_value.textChanged.connect(self.update_know_field)
 
     def sample_item_changed(self,row,col):
         if col in (0, 1, 2):  # Check if edited column is 1 (grams) or 2 (ml) # add 0 also to edit ref id in 
@@ -193,6 +193,9 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         for row, sample_name in enumerate(self.analysis[self.index].known_samples.keys()):
             self.table_widgets[self.index].setItem(row, 0, QTableWidgetItem(sample_name))
             self.table_widgets[self.index].item(row, 0).setFlags(Qt.ItemFlag.ItemIsEnabled)
+            value = self.analysis[self.index].known_values[row]
+            self.table_widgets[self.index].setItem(row, 5, QTableWidgetItem(str(value)))
+            self.table_widgets[self.index].item(row, 5).setFlags(Qt.ItemFlag.ItemIsEnabled)
 
     
     

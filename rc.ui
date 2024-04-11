@@ -507,29 +507,6 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="cr_factor_know_value_text">
-      <property name="geometry">
-       <rect>
-        <x>570</x>
-        <y>120</y>
-        <width>121</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Known value % </string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="cr_factor_know_value">
-      <property name="geometry">
-       <rect>
-        <x>570</x>
-        <y>140</y>
-        <width>121</width>
-        <height>27</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QPushButton" name="cr_factor_next_button">
       <property name="geometry">
        <rect>
@@ -1008,29 +985,6 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="fe_factor_know_value_text">
-      <property name="geometry">
-       <rect>
-        <x>570</x>
-        <y>130</y>
-        <width>121</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Known value % </string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="fe_factor_know_value">
-      <property name="geometry">
-       <rect>
-        <x>570</x>
-        <y>150</y>
-        <width>121</width>
-        <height>27</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QPushButton" name="fe_factor_next_button">
       <property name="geometry">
        <rect>
@@ -1461,16 +1415,6 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="factor_know_value">
-      <property name="geometry">
-       <rect>
-        <x>570</x>
-        <y>150</y>
-        <width>121</width>
-        <height>27</height>
-       </rect>
-      </property>
-     </widget>
      <widget class="QPushButton" name="iron_factor_next_button">
       <property name="geometry">
        <rect>
@@ -1521,19 +1465,6 @@
       </property>
       <property name="text">
        <string>Ml</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="iron_factor_know_value_text">
-      <property name="geometry">
-       <rect>
-        <x>570</x>
-        <y>130</y>
-        <width>121</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Known value % </string>
       </property>
      </widget>
      <widget class="QLabel" name="iron_factor_label_vaue">

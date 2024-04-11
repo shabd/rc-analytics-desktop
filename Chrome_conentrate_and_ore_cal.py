@@ -9,6 +9,8 @@ class ChromeOreAnalysis:
             "SARM131": {"Constant": 0.2866},
             "AMIS0388": {"Constant": 0.2746}
         }
+
+        self.known_values = [32.09,28.66,27.46]
         
         self.factor_average = None 
         self.tested_samples = []

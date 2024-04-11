@@ -12,7 +12,8 @@ class IronAnalysis:
             "SARM144":{"Constant":0.3687},
             "AMIS0388": {"Constant": 0.1798}
         }
-        
+        self.known_values = [19.88,21.47,24.99,36.87,17.98]
+
         self.factor_average = None 
         self.tested_samples = []
         self.know_sample_results = []

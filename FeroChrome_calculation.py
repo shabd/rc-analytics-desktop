@@ -9,7 +9,7 @@ class FeroChromeAnalysis:
             "NIST64C": {"Constant": 0.68},
             "SARM144": {"Constant": 0.4902},
         }
-        
+        self.known_values = [68.0,49.02]
         self.factor_average = None 
         self.tested_samples = []
         self.know_sample_results = []
