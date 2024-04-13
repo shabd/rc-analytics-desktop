@@ -48,6 +48,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.splitters =[self.splitter_7,self.splitter_2,self.splitter_5]
         self.init_sample_values_labels()
         self.init_edit()
+        self.connect_edit_buttons()
 
         self.sample_info_labels = [self.cr_sample_info,self.FeSampleInfo,self.label]
 
@@ -146,6 +147,14 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.iron_factor_next_button.clicked.connect(self.factor_results)
         self.iron_sample_next_button.clicked.connect(self.sample_results)
 
+    def connect_edit_buttons(self):
+        # self.edit_buttons = [self.ce_edit_button,self.fe_edit_button,self.iron_edit_button]
+        for button in self.edit_buttons:
+            button.clicked.connect(self.editSample)
+
+        
+
+
 
     def connect_save_buttons(self):
         self.cr_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_cr"))
@@ -197,7 +206,51 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             QMessageBox.warning(self, "Input Error", "Please enter valid numbers for grams and ml.")
 
 
+    def editSample(self):  
+        try:
+            selected_sample = self.sample_comboboxes[self.index].currentText() 
+            selected_input = self.input_comboboxes[self.index].currentText() 
+            value = float(self.edit_inputs[self.index].text())
+
+        except:
+
+            QMessageBox.warning(self, "Input Error", "Please fill in all Edit Fields with valid values.")
+            return
         
+        row = self.sample_comboboxes[self.index].currentIndex()  # Get the index of the selected item
+        if selected_input =="grams":
+            grams = value
+            self.table_widgets[self.index].setItem(row, 1, QTableWidgetItem(str(value)))
+            ml = float(self.table_widgets[self.index].item(row, 2).text())
+
+        else:
+            ml = value
+            self.table_widgets[self.index].setItem(row, 2, QTableWidgetItem(str(value)))
+            grams = float(self.table_widgets[self.index].item(row, 1).text())
+
+        self.currentSampleValues[self.index][selected_sample] = (grams, ml)
+        anaylsis_results = self.analysis[self.index].calculate_factors(self.currentSampleValues[self.index])
+        self.display_results_in_table(anaylsis_results)
+            
+        bias_violation = False
+        for result in anaylsis_results:
+            if abs(result[6]) > 0.5:
+                QMessageBox.warning(self, "Bias Violation", f"Sample '{result[0]}' exceeded the bias tolerance with a bias of {result[6]}.")
+                bias_violation = True
+                break
+        if not bias_violation:
+            self.calculated[self.index]= True
+            self.show_sample_calculations() 
+            self.update_factor_display()
+            self.hide_edit()
+        
+        self.edit_inputs[self.index].clear()
+
+
+
+
+
+
         
     def showError(self, message):
         QMessageBox.critical(self, "Error", message)
@@ -259,17 +312,21 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             for result in chrom_calculated_values:
             # Assuming the bias is the last element in the result list
                 if abs(result[6]) > 0.5:
-                    QMessageBox.warning(self, "Bias Violation", f"Sample '{result[0]}' exceeded the bias tolerance with a bias of {result[-1]}.")
+                    QMessageBox.warning(self, "Bias Violation", f"Sample '{result[0]}' exceeded the bias tolerance with a bias of {result[6]}.")
                     bias_violation = True
                     break
             if not bias_violation:
                 self.calculated[self.index]= True
                 self.show_sample_calculations() # show the second step table
                 self.update_factor_display()
+            else:
+                self.show_edit()
+                self.populate_comboboxes()
+
+
             
             self.hide_inputs_and_calculate()
             self.change_next_into_clear_button()
-            # self.show_edit()
 
         else:
             self.update_sample_info_label()
@@ -343,6 +400,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
         self.clear_display()
         self.calculated[self.index ] = False
+        self.hide_edit()
     
     def sample_results(self):
         # Collect the input data
@@ -406,6 +464,14 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.input_comboboxes[self.index].setVisible(True)
         self.edit_inputs[self.index].setVisible(True)
         self.edit_buttons[self.index].setVisible(True)
+
+    def populate_comboboxes(self):
+
+        sample_names = list(self.analysis[self.index].known_samples.keys())
+
+        self.sample_comboboxes[self.index].addItems(sample_names)
+        self.input_comboboxes[self.index].addItems(["grams","ml"])
+
 
     def hide_sample_calculations(self):
         self.sample_cal_labels[self.index].setVisible(False)
