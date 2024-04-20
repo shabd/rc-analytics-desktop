@@ -501,15 +501,18 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         file_time = time.strftime("Date_%d-%m-%Y_Time_%H-%M-%S")
         image_path = "Pics/rci as logo.png"
 
-        samples_data = [["Sample Ref ID","CR %","Cr2O3 %","Fe %", "Fe0 %"]]
-
+        # samples_data = [["Sample Ref ID","CR %","Cr2O3 %","Fe %", "Fe0 %"]]
+        samples_data = [["Sample ","CR %","Cr2O3 %","Fe %", "Fe0 %"]]
         sampletables = self.extractSampleTables()
         #iron chrome
         for i in range(len(sampletables[2])):
             if i < len(sampletables[2]):
                 index_chrome = self.findSampleIndex(sampletables[2][i][0],sampletables[0])
                 if index_chrome != -1 :
-                    item = [sampletables[2][i][0],"",sampletables[0][index_chrome][4],"",sampletables[2][i][4]]
+                    # item = [sampletables[2][i][0],"",sampletables[0][index_chrome][4],"",sampletables[2][i][4]]
+                    
+                    item = ["Iron + Chrome","",sampletables[0][index_chrome][4],"",sampletables[2][i][4]]
+
                     samples_data.append(item)
                     sampletables[2].pop(i)
                     sampletables[0].pop(index_chrome)
@@ -520,22 +523,29 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             if i < len(sampletables[2]):
                 index_fe = self.findSampleIndex(sampletables[2][i][0],sampletables[1])
                 if index_fe != -1 :
-                    item = [sampletables[2][i][0],sampletables[1][index_fe][3],"",sampletables[2][i][3],""]
+                    # item = [sampletables[2][i][0],sampletables[1][index_fe][3],"",sampletables[2][i][3],""]
+                    item = ["Iron + Ferro chrome",sampletables[1][index_fe][3],"",sampletables[2][i][3],""]
+
                     samples_data.append(item)
                     sampletables[2].pop(i)
                     sampletables[1].pop(index_fe)
                     i+=1
 
         for i in range(len(sampletables[0])):
-            item = [sampletables[0][i][0],sampletables[0][i][3],sampletables[0][i][4],"",""]
+            # item = [sampletables[0][i][0],sampletables[0][i][3],sampletables[0][i][4],"",""]
+            item = ["Chrome",sampletables[0][i][3],sampletables[0][i][4],"",""]
             samples_data.append(item)
 
         for i in range(len(sampletables[1])):
-            item = [sampletables[1][i][0],sampletables[1][i][3],"","",""]
+            # item = [sampletables[1][i][0],sampletables[1][i][3],"","",""]
+            item = ["Ferro Chrome",sampletables[1][i][3],"","",""]
+
             samples_data.append(item)
 
         for i in range(len(sampletables[2])):
-            item = [sampletables[2][i][0],"","",sampletables[2][i][3],sampletables[2][i][4]]
+            # item = [sampletables[2][i][0],"","",sampletables[2][i][3],sampletables[2][i][4]]
+            item = ["Iron","","",sampletables[2][i][3],sampletables[2][i][4]]
+
             samples_data.append(item)
         print(samples_data)
 
