@@ -20,7 +20,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='app',
+    name='rci_app',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -31,6 +31,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['logo.ico'],
 )
 coll = COLLECT(
     exe,

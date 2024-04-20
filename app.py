@@ -501,7 +501,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         file_time = time.strftime("Date_%d-%m-%Y_Time_%H-%M-%S")
         image_path = "Pics/rci as logo.png"
 
-        samples_data = [["Sample Ref ID","CR %","Cr2O3","Fe %", "Fe0 %"]]
+        samples_data = [["Sample Ref ID","CR %","Cr2O3 %","Fe %", "Fe0 %"]]
 
         sampletables = self.extractSampleTables()
         #iron chrome
