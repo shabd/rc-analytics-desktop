@@ -5,6 +5,7 @@ class IronAnalysis:
 
 
     def __init__(self):
+        self.name = "Iron"
         self.known_samples = {
             "SARM146": {"Constant": 0.1988},
             "SARM131": {"Constant": 0.2147},
@@ -35,8 +36,8 @@ class IronAnalysis:
             
         # 2. Get the average 
         self.factor_average = sum(factors)/ len(factors)
-        # self.standard_deviation = np.std(factors)
-        # self.coefficient_of_variation = (self.standard_deviation / self.factor_average) * 100
+        self.standard_deviation = np.std(factors)
+        self.coefficient_of_variation = (self.standard_deviation / self.factor_average) * 100
 
         
         i=0

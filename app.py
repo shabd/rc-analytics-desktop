@@ -2,19 +2,24 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication,QMainWindow, QMessageBox, QTableWidgetItem,QLCDNumber,QTableWidget
 from PyQt6.QtGui import QPalette,QDoubleValidator,QIcon
 
-from rc_ui import Ui_MainWindow
+from rc_onesave_ui import Ui_MainWindow
 from Chrome_conentrate_and_ore_cal import ChromeOreAnalysis
 from FeroChrome_calculation import FeroChromeAnalysis
 from Iron_calculation import IronAnalysis
 
 import sys
 import time
+import datetime
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle,Paragraph
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle,Paragraph,Image,Spacer,PageBreak
 from reportlab.lib.styles import ParagraphStyle, TA_LEFT
 
 from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch,cm
+from reportlab.lib.styles import getSampleStyleSheet
+
+# from PIL import Image
 
 
 class LabSystem(QMainWindow, Ui_MainWindow):
@@ -58,7 +63,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         for table in self.sample_table_widgets:
             table.cellChanged.connect(self.sample_item_changed)
 
-        self.sample_save_buttons = [self.cr_save_button,self.fe_save_button,self.IronSaveButton]
+        # self.sample_save_buttons = [self.cr_save_button,self.fe_save_button,self.IronSaveButton]
 
         self.sample_next_buttons = [self.cr_sample_next_button,self.fe_sample_next_button,self.iron_sample_next_button]
 
@@ -75,7 +80,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.connect_next_buttons()
         self.save_button.clicked.connect(self.saveAllTables)
 
-        self.connect_save_buttons()
+        # self.connect_save_buttons()
         
         self.set_on_text_changed()
 
@@ -156,10 +161,10 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
 
 
-    def connect_save_buttons(self):
-        self.cr_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_cr"))
-        self.fe_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_fe"))
-        self.IronSaveButton.clicked.connect(lambda: self.saveTablesToPDF("table_data_iron"))
+    # def connect_save_buttons(self):
+    #     self.cr_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_cr"))
+    #     self.fe_save_button.clicked.connect(lambda: self.saveTablesToPDF("table_data_fe"))
+    #     self.IronSaveButton.clicked.connect(lambda: self.saveTablesToPDF("table_data_iron"))
 
     def set_on_text_changed(self):
         self.cr_factor_grams_value.textChanged.connect(self.update_grams_field)
@@ -245,11 +250,6 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             self.hide_edit()
         
         self.edit_inputs[self.index].clear()
-
-
-
-
-
 
         
     def showError(self, message):
@@ -468,7 +468,6 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     def populate_comboboxes(self):
 
         sample_names = list(self.analysis[self.index].known_samples.keys())
-
         self.sample_comboboxes[self.index].addItems(sample_names)
         self.input_comboboxes[self.index].addItems(["grams","ml"])
 
@@ -476,7 +475,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     def hide_sample_calculations(self):
         self.sample_cal_labels[self.index].setVisible(False)
         self.sample_table_widgets[self.index].setVisible(False)
-        self.sample_save_buttons[self.index].setVisible(False)
+        # self.sample_save_buttons[self.index].setVisible(False)
         self.splitters[self.index].setVisible(False)
 
         self.save_button.setVisible(False)
@@ -485,10 +484,12 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     def show_sample_calculations(self):
         self.sample_cal_labels[self.index].setVisible(True)
         self.sample_table_widgets[self.index].setVisible(True)
-        self.sample_save_buttons[self.index].setVisible(True)
+        # self.sample_save_buttons[self.index].setVisible(True)
         self.splitters[self.index].setVisible(True)
 
-        # show save buttons if all 3 tables are calculated!!! TODO
+        # if self.calculated[0] and not(self.calculated[1]) and not(self.calculated[2]):
+        if self.calculated[0] and self.calculated[1] and self.calculated[2]:
+            self.save_button.setVisible(True)
 
     def update_grams_field(self):
         text = self.values['grams'][self.index].text()
@@ -519,119 +520,325 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     #     except:
     #         pass
 
+    def extractSampleTables(self):
+        sample_data=[[],[],[]]
+        for i in range(3):
+            for row in range(self.sample_table_widgets[i].rowCount()):
+                row_data = []
+                for col in range(self.sample_table_widgets[i].columnCount()):
+                    item = self.sample_table_widgets[i].item(row, col)
+                    row_data.append(item.text() if item else "")
+                sample_data[i].append(row_data)
+            # print(sample_data[i])
+        return sample_data
+
+    def findSampleIndex(self,ref_id, table):
+        for i in range(len(table)):
+            if table[i][0] == ref_id:
+                return i
+            
+        return -1
+
+
+
 
     def saveAllTables(self):
-        pass
-
-
-    def saveTablesToPDF(self, filename):
         try:
+
+            filename = "rci"
             current_time = time.strftime("Date_%d-%m-%Y_Time_%H-%M-%S")
             ext=".pdf"
             final_name = f"{filename}_{current_time}{ext}"
 
-            doc = SimpleDocTemplate(final_name, pagesize=letter, leftMargin=50)
+            doc = SimpleDocTemplate(final_name, pagesize=letter, leftMargin=20,  # Adjust as needed
+                            rightMargin=2.2, topMargin=1.5, bottomMargin=2.5)
+
             elements = []
 
-            # Prepare data for the Factors Table
-            factors_data = [[["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias"]],
-                            [["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias"]],
-                            [["Sample Name", "Grams", "Ml", "Factor", "%Fe", "Known %", "Bias", "%FeO"]]]
-
-            for row in range(self.table_widgets[self.index].rowCount()):
-                # names_of_samples = list(self.analysis[self.index].known_samples.keys())
-                # row_data = [names_of_samples[row]]  # Start each row with the sample name
-                row_data=[]
-                for col in range(self.table_widgets[self.index].columnCount()):
-                    item = self.table_widgets[self.index].item(row, col)
-                    row_data.append(item.text() if item else "")
-                factors_data[self.index].append(row_data)
-
-            # Add the Factors Table to the elements
-            factors_table = Table(factors_data[self.index], hAlign='LEFT')
-            factors_table.setStyle(TableStyle([
-                ('BACKGROUND', (0,0), (-1,0), colors.grey),
-                ('GRID', (0,0), (-1,-1), 1, colors.black),
-                ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke)
-            ]))
-
-            
-            elements.append(Paragraph(f"<b>Factor Calculation Table</b>", style=ParagraphStyle(
-                            alignment=TA_LEFT,  
-                            fontSize=24,   
-                            fontName="Helvetica-Bold",
-                            name='FactorCalculationTable'
-                        )))
-            elements.append(Table([[""]], colWidths=[doc.width]))
-
-            elements.append(factors_table)
-            
-            # Adding a space between tables
-            elements.append(Table([[""]], colWidths=[doc.width]))
-
-            factor_average = self.analysis[self.index].factor_average
-            elements.append(Paragraph(f"<b>Factor Average: {factor_average:.6f}</b>", style=ParagraphStyle(
-                alignment=TA_LEFT,  
-                fontSize=10,   
-                fontName="Helvetica-Bold",
-                name='FactorAverage'
-            )))
+            # Create content elements
+            image_path = "Pics/rci as logo.png"
+            image_width = 2.5  # Adjust width in inches
+            image_height = 0.5  # Adjust height in inches
+            elements.append(Image(image_path, width=inch * image_width, height=inch * image_height))
 
 
-            # standard_deviation = self.analysis[self.index].standard_deviation
-            # elements.append(Paragraph(f"<b>Factor Standard Deviation: {standard_deviation:.6f}</b>", style=ParagraphStyle(
-            #     alignment=TA_LEFT,  
-            #     fontSize=10,   
-            #     fontName="Helvetica-Bold",
-            #     name='StandardDeviation'
-            # )))
+            header_font_size = 10
 
-            # coefficient_of_variation = self.analysis[self.index].coefficient_of_variation
-            # elements.append(Paragraph(f"<b>Factor Standard Deviation Percentage: {coefficient_of_variation:.2f}</b>", style=ParagraphStyle(
-            #     alignment=TA_LEFT,  
-            #     fontSize=10,   
-            #     fontName="Helvetica-Bold",
-            #     name= 'StandardDeviationPercentage'
-            # )))
-
-            elements.append(Table([[""]], colWidths=[doc.width]))
-
-            elements.append(Paragraph(f"<b>Sample Calculation Table</b>", style=ParagraphStyle(
-                            alignment=TA_LEFT,  
-                            fontSize=24,   
-                            fontName="Helvetica-Bold",
-                            name='SampleCalculationTable'
-                        )))
-            
-            elements.append(Table([[""]], colWidths=[doc.width]))
+            styles = getSampleStyleSheet()
+            header_style = styles['Heading1']
+            header_style.fontSize = header_font_size
+            header_style.alignment =1
+            header_text = "FINAL CERTIFICATE OF ANALYSIS"
+            elements.append(Paragraph(header_text, header_style))
+            header_text = "REVISION 0"
+            elements.append(Paragraph(header_text, header_style))
 
 
+            # Define styles (optional)
+            styles = getSampleStyleSheet()
+            contact_style = styles['Normal']  # Adjust style as needed
 
-            
-            # Prepare data for the Sample Table
-            sample_data = [[["Ref ID", "Grams", "Ml", "Cal % CR","% Calc Cr2O3"]],
-                        [["Ref ID", "Grams", "Ml", "Cal % CR"]],
-                        [["Ref ID", "Grams", "Ml", "%Fe", "%FeO"]]]
-            for row in range(self.sample_table_widgets[self.index].rowCount()):
-                row_data = []
-                for col in range(self.sample_table_widgets[self.index].columnCount()):
-                    item = self.sample_table_widgets[self.index].item(row, col)
-                    row_data.append(item.text() if item else "")
-                sample_data[self.index].append(row_data)
+            # Create paragraphs for contact information
+            from_text = Paragraph("FROM:         RCI Analytical Services", contact_style)
+            tel_text = Paragraph("TEL:", contact_style)
+            fax_text = Paragraph("FAX:", contact_style)
+            date_text = Paragraph(f"Date:       {datetime.date.today()}", contact_style)
+            current_time = datetime.datetime.now().time()
+            time_text = Paragraph(f"Time:       {current_time.hour:02d}:{current_time.minute:02d}:{current_time.second:02d}", contact_style)
 
-            # Add the Sample Table to the elements
-            sample_table = Table(sample_data[self.index], hAlign='LEFT')
+            # elements.append(Spacer(1, 0.5 * cm))  # Adjust spacing
+
+            elements.append(from_text)
+            elements.append(tel_text)
+            elements.append(fax_text)
+            elements.append(date_text)
+            elements.append(time_text)
+
+            elements.append(Spacer(1, 0.5 * cm))  # Adjust spacing
+
+            samples_data = [["Sample Ref ID","CR %","Cr2O3","Fe %", "Fe0 %"]]
+
+            sampletables = self.extractSampleTables()
+
+            for i in range(len(sampletables[2])):
+                if i < len(sampletables[2]):
+                    index_chrome = self.findSampleIndex(sampletables[2][i][0],sampletables[0])
+                    if index_chrome != -1 :
+                        item = [sampletables[2][i][0],sampletables[0][index_chrome][3],sampletables[0][index_chrome][4],sampletables[2][i][3],sampletables[2][i][3]]
+                        samples_data.append(item)
+                        sampletables[2].pop(i)
+                        sampletables[0].pop(index_chrome)
+                        i+=1
+
+
+            for i in range(len(sampletables[2])):
+                if i < len(sampletables[2]):
+                    index_fe = self.findSampleIndex(sampletables[2][i][0],sampletables[1])
+                    if index_fe != -1 :
+                        item = [sampletables[2][i][0],sampletables[1][index_fe][3],"",sampletables[2][i][3],sampletables[2][i][3]]
+                        samples_data.append(item)
+                        sampletables[2].pop(i)
+                        sampletables[1].pop(index_fe)
+                        i+=1
+
+            for i in range(len(sampletables[0])):
+                item = [sampletables[0][i][0],sampletables[0][i][3],sampletables[0][i][4],"",""]
+                samples_data.append(item)
+
+            for i in range(len(sampletables[1])):
+                item = [sampletables[1][i][0],sampletables[1][i][3],"","",""]
+                samples_data.append(item)
+
+            for i in range(len(sampletables[2])):
+                item = [sampletables[2][i][0],"","",sampletables[2][i][3],sampletables[2][i][4]]
+                samples_data.append(item)
+
+
+
+
+            print(samples_data)
+
+            sample_table = Table(samples_data, hAlign='LEFT')
             sample_table.setStyle(TableStyle([
-                ('BACKGROUND', (0,0), (-1,0), colors.grey),
+                ('BACKGROUND', (0,0), (-1,0), colors.blue),
+                ('BACKGROUND', (0,0), (0,-1), colors.blue),
+
                 ('GRID', (0,0), (-1,-1), 1, colors.black),
-                ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke)
+                ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke),
+                ('TEXTCOLOR',(0,0),(0,-1),colors.whitesmoke)
+
             ]))
             elements.append(sample_table)
-            # Build the PDF
+
+
+
+
+
+            elements.append(Table([[""]], colWidths=[doc.width]))
+
+
+
+
+
+            factors_data = [[["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias"]],
+                [["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias"]],
+                [["Sample Name", "Grams", "Ml", "Factor", "%Fe", "Known %", "Bias", "%FeO"]]]
+
+            for i in range(3):
+                for row in range(self.table_widgets[i].rowCount()):
+                    # names_of_samples = list(self.analysis[self.index].known_samples.keys())
+                    # row_data = [names_of_samples[row]]  # Start each row with the sample name
+                    row_data=[]
+                    for col in range(self.table_widgets[i].columnCount()):
+                        item = self.table_widgets[i].item(row, col)
+                        row_data.append(item.text() if item else "")
+                    factors_data[i].append(row_data)
+
+                # Add the Factors Table to the elements
+                factors_table = Table(factors_data[i], hAlign='LEFT')
+                factors_table.setStyle(TableStyle([
+                    ('BACKGROUND', (0,0), (-1,0), colors.blue),
+                    ('GRID', (0,0), (-1,-1), 1, colors.black),
+                    ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke)
+                ]))
+
+                
+                elements.append(Paragraph(f"<b>{self.analysis[i].name} Factor Calculation Table</b>", style=ParagraphStyle(
+                                alignment=TA_LEFT,  
+                                fontSize=24,   
+                                fontName="Helvetica-Bold",
+                                name='FactorCalculationTable'
+                            )))
+                elements.append(Table([[""]], colWidths=[doc.width]))
+
+                elements.append(factors_table)
+                
+                # Adding a space between tables
+                elements.append(Table([[""]], colWidths=[doc.width]))
+
+                factor_average = self.analysis[i].factor_average
+                elements.append(Paragraph(f"<b>Factor Average: {factor_average:.6f}</b>", style=ParagraphStyle(
+                    alignment=TA_LEFT,  
+                    fontSize=10,   
+                    fontName="Helvetica-Bold",
+                    name='FactorAverage'
+                )))
+
+
+                standard_deviation = self.analysis[i].standard_deviation
+                elements.append(Paragraph(f"<b>Factor Standard Deviation: {standard_deviation:.6f}</b>", style=ParagraphStyle(
+                    alignment=TA_LEFT,  
+                    fontSize=10,   
+                    fontName="Helvetica-Bold",
+                    name='StandardDeviation'
+                )))
+
+                coefficient_of_variation = self.analysis[i].coefficient_of_variation
+                elements.append(Paragraph(f"<b>Factor Standard Deviation Percentage: {coefficient_of_variation:.2f}</b>", style=ParagraphStyle(
+                    alignment=TA_LEFT,  
+                    fontSize=10,   
+                    fontName="Helvetica-Bold",
+                    name= 'StandardDeviationPercentage'
+                )))
+
+                elements.append(Table([[""]], colWidths=[doc.width]))
+
             doc.build(elements)
             QMessageBox.information(self, "Success", f"Data saved successfully to {final_name}!")
+
         except:
             QMessageBox.warning(self, "Error in Saving PDF", "An Error Occured during Saving the file , please try again later")
+
+
+
+
+    # def saveTablesToPDF(self, filename):
+    #     try:
+    #         current_time = time.strftime("Date_%d-%m-%Y_Time_%H-%M-%S")
+    #         ext=".pdf"
+    #         final_name = f"{filename}_{current_time}{ext}"
+
+    #         doc = SimpleDocTemplate(final_name, pagesize=letter, leftMargin=50)
+    #         elements=[]
+    #         # Prepare data for the Factors Table
+    #         factors_data = [[["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias"]],
+    #                         [["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias"]],
+    #                         [["Sample Name", "Grams", "Ml", "Factor", "%Fe", "Known %", "Bias", "%FeO"]]]
+
+    #         for row in range(self.table_widgets[self.index].rowCount()):
+    #             # names_of_samples = list(self.analysis[self.index].known_samples.keys())
+    #             # row_data = [names_of_samples[row]]  # Start each row with the sample name
+    #             row_data=[]
+    #             for col in range(self.table_widgets[self.index].columnCount()):
+    #                 item = self.table_widgets[self.index].item(row, col)
+    #                 row_data.append(item.text() if item else "")
+    #             factors_data[self.index].append(row_data)
+
+    #         # Add the Factors Table to the elements
+    #         factors_table = Table(factors_data[self.index], hAlign='LEFT')
+    #         factors_table.setStyle(TableStyle([
+    #             ('BACKGROUND', (0,0), (-1,0), colors.blue),
+    #             ('GRID', (0,0), (-1,-1), 1, colors.black),
+    #             ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke)
+    #         ]))
+
+            
+    #         elements.append(Paragraph(f"<b>Factor Calculation Table</b>", style=ParagraphStyle(
+    #                         alignment=TA_LEFT,  
+    #                         fontSize=24,   
+    #                         fontName="Helvetica-Bold",
+    #                         name='FactorCalculationTable'
+    #                     )))
+    #         elements.append(Table([[""]], colWidths=[doc.width]))
+
+    #         elements.append(factors_table)
+            
+    #         # Adding a space between tables
+    #         elements.append(Table([[""]], colWidths=[doc.width]))
+
+    #         factor_average = self.analysis[self.index].factor_average
+    #         elements.append(Paragraph(f"<b>Factor Average: {factor_average:.6f}</b>", style=ParagraphStyle(
+    #             alignment=TA_LEFT,  
+    #             fontSize=10,   
+    #             fontName="Helvetica-Bold",
+    #             name='FactorAverage'
+    #         )))
+
+
+    #         standard_deviation = self.analysis[self.index].standard_deviation
+    #         elements.append(Paragraph(f"<b>Factor Standard Deviation: {standard_deviation:.6f}</b>", style=ParagraphStyle(
+    #             alignment=TA_LEFT,  
+    #             fontSize=10,   
+    #             fontName="Helvetica-Bold",
+    #             name='StandardDeviation'
+    #         )))
+
+    #         coefficient_of_variation = self.analysis[self.index].coefficient_of_variation
+    #         elements.append(Paragraph(f"<b>Factor Standard Deviation Percentage: {coefficient_of_variation:.2f}</b>", style=ParagraphStyle(
+    #             alignment=TA_LEFT,  
+    #             fontSize=10,   
+    #             fontName="Helvetica-Bold",
+    #             name= 'StandardDeviationPercentage'
+    #         )))
+
+    #         elements.append(Table([[""]], colWidths=[doc.width]))
+
+    #         elements.append(Paragraph(f"<b>Sample Calculation Table</b>", style=ParagraphStyle(
+    #                         alignment=TA_LEFT,  
+    #                         fontSize=24,   
+    #                         fontName="Helvetica-Bold",
+    #                         name='SampleCalculationTable'
+    #                     )))
+            
+    #         elements.append(Table([[""]], colWidths=[doc.width]))
+
+
+
+            
+    #         # Prepare data for the Sample Table
+    #         sample_data = [[["Ref ID", "Grams", "Ml", "Cal % CR","% Calc Cr2O3"]],
+    #                     [["Ref ID", "Grams", "Ml", "Cal % CR"]],
+    #                     [["Ref ID", "Grams", "Ml", "%Fe", "%FeO"]]]
+    #         for row in range(self.sample_table_widgets[self.index].rowCount()):
+    #             row_data = []
+    #             for col in range(self.sample_table_widgets[self.index].columnCount()):
+    #                 item = self.sample_table_widgets[self.index].item(row, col)
+    #                 row_data.append(item.text() if item else "")
+    #             sample_data[self.index].append(row_data)
+
+    #         # Add the Sample Table to the elements
+    #         sample_table = Table(sample_data[self.index], hAlign='LEFT')
+    #         sample_table.setStyle(TableStyle([
+    #             ('BACKGROUND', (0,0), (-1,0), colors.grey),
+    #             ('GRID', (0,0), (-1,-1), 1, colors.black),
+    #             ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke)
+    #         ]))
+    #         elements.append(sample_table)
+    #         # Build the PDF
+    #         doc.build(elements)
+    #         QMessageBox.information(self, "Success", f"Data saved successfully to {final_name}!")
+    #     except:
+    #         QMessageBox.warning(self, "Error in Saving PDF", "An Error Occured during Saving the file , please try again later")
 
 
 

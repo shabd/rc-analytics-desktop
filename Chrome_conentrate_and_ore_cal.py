@@ -1,9 +1,10 @@
-# import numpy as np
+import numpy as np
 
 class ChromeOreAnalysis: 
 
 
     def __init__(self):
+        self.name = "Chrome Ore"
         self.known_samples = {
             "SARM146": {"Constant": 0.3209},
             "SARM131": {"Constant": 0.2866},
@@ -33,8 +34,8 @@ class ChromeOreAnalysis:
             
         # 2. Get the average 
         self.factor_average = sum(factors)/ len(factors)
-        # self.standard_deviation = np.std(factors)
-        # self.coefficient_of_variation = (self.standard_deviation / self.factor_average) * 100
+        self.standard_deviation = np.std(factors)
+        self.coefficient_of_variation = (self.standard_deviation / self.factor_average) * 100
 
 
         

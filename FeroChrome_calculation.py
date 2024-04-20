@@ -5,6 +5,7 @@ import numpy as np
 class FeroChromeAnalysis:
     
     def __init__(self):
+        self.name = "Ferro Chrome"
         self.known_samples = {
             "NIST64C": {"Constant": 0.68},
             "SARM144": {"Constant": 0.4902},
@@ -29,8 +30,8 @@ class FeroChromeAnalysis:
             
         # 2. Get the average 
         self.factor_average = sum(factors)/ len(factors)
-        # self.standard_deviation = np.std(factors)
-        # self.coefficient_of_variation = (self.standard_deviation / self.factor_average) * 100
+        self.standard_deviation = np.std(factors)
+        self.coefficient_of_variation = (self.standard_deviation / self.factor_average) * 100
 
         i=0
         # 3. We need to cal %Cr and the bias 
