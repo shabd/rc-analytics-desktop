@@ -505,32 +505,37 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         samples_data = [["Sample ","CR %","Cr2O3 %","Fe %", "Fe0 %"]]
         sampletables = self.extractSampleTables()
         #iron chrome
-        for i in range(len(sampletables[2])):
-            if i < len(sampletables[2]):
-                index_chrome = self.findSampleIndex(sampletables[2][i][0],sampletables[0])
-                if index_chrome != -1 :
-                    # item = [sampletables[2][i][0],"",sampletables[0][index_chrome][4],"",sampletables[2][i][4]]
-                    
-                    item = ["Iron + Chrome","",sampletables[0][index_chrome][4],"",sampletables[2][i][4]]
+        i=0
+        # for i in range(len(sampletables[2])):
+        while i < len(sampletables[2]):
+            index_chrome = self.findSampleIndex(sampletables[2][i][0],sampletables[0])
+            if index_chrome != -1 :
+                # item = [sampletables[2][i][0],"",sampletables[0][index_chrome][4],"",sampletables[2][i][4]]
+                
+                item = ["Iron + Chrome","",sampletables[0][index_chrome][4],"",sampletables[2][i][4]]
 
-                    samples_data.append(item)
-                    sampletables[2].pop(i)
-                    sampletables[0].pop(index_chrome)
-                    i+=1
+                samples_data.append(item)
+                sampletables[2].pop(i)
+                sampletables[0].pop(index_chrome)
+                i-=1
+            i+=1
 
         #iron fe
-        for i in range(len(sampletables[2])):
-            if i < len(sampletables[2]):
-                index_fe = self.findSampleIndex(sampletables[2][i][0],sampletables[1])
-                if index_fe != -1 :
-                    # item = [sampletables[2][i][0],sampletables[1][index_fe][3],"",sampletables[2][i][3],""]
-                    item = ["Iron + Ferro chrome",sampletables[1][index_fe][3],"",sampletables[2][i][3],""]
+        i=0
+        # for i in range(len(sampletables[2])):
+        while i < len(sampletables[2]):
+            index_fe = self.findSampleIndex(sampletables[2][i][0],sampletables[1])
+            if index_fe != -1 :
+                # item = [sampletables[2][i][0],sampletables[1][index_fe][3],"",sampletables[2][i][3],""]
+                item = ["Iron + Ferro chrome",sampletables[1][index_fe][3],"",sampletables[2][i][3],""]
 
-                    samples_data.append(item)
-                    sampletables[2].pop(i)
-                    sampletables[1].pop(index_fe)
-                    i+=1
+                samples_data.append(item)
+                sampletables[2].pop(i)
+                sampletables[1].pop(index_fe)
+                i-=1
+            i+=1
 
+        i=0
         for i in range(len(sampletables[0])):
             # item = [sampletables[0][i][0],sampletables[0][i][3],sampletables[0][i][4],"",""]
             item = ["Chrome",sampletables[0][i][3],sampletables[0][i][4],"",""]
