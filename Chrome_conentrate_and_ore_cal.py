@@ -1,4 +1,5 @@
-import numpy as np
+# import numpy as np
+import statistics
 
 class ChromeOreAnalysis: 
 
@@ -34,8 +35,14 @@ class ChromeOreAnalysis:
             
         # 2. Get the average 
         self.factor_average = sum(factors)/ len(factors)
-        self.standard_deviation = np.std(factors)
-        self.coefficient_of_variation = (self.standard_deviation / self.factor_average) * 100
+        self.standard_deviation = statistics.stdev(factors)
+        mean_value = statistics.mean(factors)
+        self.coefficient_of_variation = (self.standard_deviation / mean_value) * 100
+
+
+
+        # self.standard_deviation = np.std(factors)
+        # self.coefficient_of_variation = (self.standard_deviation / self.factor_average) * 100
 
 
         

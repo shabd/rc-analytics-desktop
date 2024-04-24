@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1015</width>
-    <height>701</height>
+    <width>1430</width>
+    <height>722</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,9 +19,15 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>991</width>
-      <height>581</height>
+      <width>1411</width>
+      <height>671</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>1</horstretch>
+      <verstretch>1</verstretch>
+     </sizepolicy>
     </property>
     <property name="currentIndex">
      <number>0</number>
@@ -51,8 +57,8 @@
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>531</width>
-        <height>181</height>
+        <width>741</width>
+        <height>161</height>
        </rect>
       </property>
       <row>
@@ -155,6 +161,14 @@
         <set>ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
        </property>
       </item>
+      <item row="0" column="6">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsDropEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+       </property>
+      </item>
       <item row="1" column="1">
        <property name="text">
         <string/>
@@ -195,6 +209,14 @@
         <set>ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
        </property>
       </item>
+      <item row="1" column="6">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsDropEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+       </property>
+      </item>
       <item row="2" column="1">
        <property name="text">
         <string/>
@@ -233,6 +255,11 @@
        </property>
        <property name="flags">
         <set>ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+       </property>
+      </item>
+      <item row="2" column="6">
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsDropEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
        </property>
       </item>
       <item row="3" column="1">
@@ -319,8 +346,8 @@
      <widget class="QLabel" name="cr_sample_info">
       <property name="geometry">
        <rect>
-        <x>560</x>
-        <y>0</y>
+        <x>950</x>
+        <y>10</y>
         <width>221</width>
         <height>20</height>
        </rect>
@@ -332,7 +359,7 @@
      <widget class="QLabel" name="cr_factor_label_value">
       <property name="geometry">
        <rect>
-        <x>920</x>
+        <x>1300</x>
         <y>10</y>
         <width>60</width>
         <height>16</height>
@@ -345,7 +372,7 @@
      <widget class="QLCDNumber" name="cr_factor_display">
       <property name="geometry">
        <rect>
-        <x>920</x>
+        <x>1300</x>
         <y>40</y>
         <width>64</width>
         <height>23</height>
@@ -356,9 +383,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>270</y>
-        <width>511</width>
-        <height>192</height>
+        <y>360</y>
+        <width>651</width>
+        <height>201</height>
        </rect>
       </property>
       <column>
@@ -391,7 +418,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>250</y>
+        <y>320</y>
         <width>201</width>
         <height>16</height>
        </rect>
@@ -403,8 +430,8 @@
      <widget class="QSplitter" name="splitter_7">
       <property name="geometry">
        <rect>
-        <x>540</x>
-        <y>270</y>
+        <x>750</x>
+        <y>350</y>
         <width>121</width>
         <height>191</height>
        </rect>
@@ -451,8 +478,8 @@
      <widget class="QLabel" name="cr_factor_grams_text">
       <property name="geometry">
        <rect>
-        <x>570</x>
-        <y>20</y>
+        <x>950</x>
+        <y>30</y>
         <width>121</width>
         <height>16</height>
        </rect>
@@ -464,8 +491,8 @@
      <widget class="QLineEdit" name="cr_factor_grams_value">
       <property name="geometry">
        <rect>
-        <x>570</x>
-        <y>40</y>
+        <x>950</x>
+        <y>50</y>
         <width>121</width>
         <height>27</height>
        </rect>
@@ -474,8 +501,8 @@
      <widget class="QLabel" name="cr_factor_ml_text">
       <property name="geometry">
        <rect>
-        <x>570</x>
-        <y>70</y>
+        <x>950</x>
+        <y>80</y>
         <width>121</width>
         <height>16</height>
        </rect>
@@ -487,8 +514,8 @@
      <widget class="QLineEdit" name="cr_factor_ml_value">
       <property name="geometry">
        <rect>
-        <x>570</x>
-        <y>90</y>
+        <x>950</x>
+        <y>100</y>
         <width>121</width>
         <height>27</height>
        </rect>
@@ -497,8 +524,8 @@
      <widget class="QPushButton" name="cr_factor_next_button">
       <property name="geometry">
        <rect>
-        <x>570</x>
-        <y>170</y>
+        <x>950</x>
+        <y>150</y>
         <width>121</width>
         <height>29</height>
        </rect>
@@ -510,7 +537,7 @@
      <widget class="QLabel" name="cr_edit_label">
       <property name="geometry">
        <rect>
-        <x>760</x>
+        <x>1160</x>
         <y>10</y>
         <width>101</width>
         <height>16</height>
@@ -523,7 +550,7 @@
      <widget class="QComboBox" name="cr_sample_combobox">
       <property name="geometry">
        <rect>
-        <x>760</x>
+        <x>1160</x>
         <y>40</y>
         <width>101</width>
         <height>22</height>
@@ -533,8 +560,8 @@
      <widget class="QComboBox" name="cr_input_combobox">
       <property name="geometry">
        <rect>
-        <x>760</x>
-        <y>90</y>
+        <x>1160</x>
+        <y>80</y>
         <width>101</width>
         <height>22</height>
        </rect>
@@ -543,8 +570,8 @@
      <widget class="QLineEdit" name="cr_edit_input">
       <property name="geometry">
        <rect>
-        <x>760</x>
-        <y>130</y>
+        <x>1160</x>
+        <y>120</y>
         <width>101</width>
         <height>22</height>
        </rect>
@@ -553,8 +580,8 @@
      <widget class="QPushButton" name="ce_edit_button">
       <property name="geometry">
        <rect>
-        <x>760</x>
-        <y>170</y>
+        <x>1160</x>
+        <y>160</y>
         <width>93</width>
         <height>28</height>
        </rect>
@@ -584,7 +611,7 @@
      <widget class="QLabel" name="FeSampleInfo">
       <property name="geometry">
        <rect>
-        <x>560</x>
+        <x>950</x>
         <y>0</y>
         <width>221</width>
         <height>20</height>
@@ -602,8 +629,8 @@
        <rect>
         <x>10</x>
         <y>30</y>
-        <width>531</width>
-        <height>181</height>
+        <width>771</width>
+        <height>101</height>
        </rect>
       </property>
       <row>
@@ -870,7 +897,7 @@
      <widget class="QLCDNumber" name="fe_factor_display">
       <property name="geometry">
        <rect>
-        <x>910</x>
+        <x>1300</x>
         <y>40</y>
         <width>64</width>
         <height>23</height>
@@ -880,7 +907,7 @@
      <widget class="QLabel" name="fe_factor_label_text">
       <property name="geometry">
        <rect>
-        <x>910</x>
+        <x>1300</x>
         <y>10</y>
         <width>60</width>
         <height>16</height>
@@ -972,7 +999,7 @@
      <widget class="QLabel" name="fe_factor_grams_text">
       <property name="geometry">
        <rect>
-        <x>570</x>
+        <x>950</x>
         <y>30</y>
         <width>121</width>
         <height>16</height>
@@ -985,7 +1012,7 @@
      <widget class="QLineEdit" name="fe_factor_grams_value">
       <property name="geometry">
        <rect>
-        <x>570</x>
+        <x>950</x>
         <y>50</y>
         <width>121</width>
         <height>27</height>
@@ -995,7 +1022,7 @@
      <widget class="QLabel" name="fe_factor_ml_text">
       <property name="geometry">
        <rect>
-        <x>570</x>
+        <x>950</x>
         <y>74</y>
         <width>121</width>
         <height>16</height>
@@ -1008,7 +1035,7 @@
      <widget class="QLineEdit" name="fe_factor_ml_value">
       <property name="geometry">
        <rect>
-        <x>570</x>
+        <x>950</x>
         <y>96</y>
         <width>121</width>
         <height>27</height>
@@ -1018,7 +1045,7 @@
      <widget class="QPushButton" name="fe_factor_next_button">
       <property name="geometry">
        <rect>
-        <x>570</x>
+        <x>950</x>
         <y>180</y>
         <width>121</width>
         <height>29</height>
@@ -1031,7 +1058,7 @@
      <widget class="QComboBox" name="fe_input_combobox">
       <property name="geometry">
        <rect>
-        <x>760</x>
+        <x>1160</x>
         <y>90</y>
         <width>111</width>
         <height>22</height>
@@ -1041,7 +1068,7 @@
      <widget class="QLineEdit" name="fe_edit_input">
       <property name="geometry">
        <rect>
-        <x>760</x>
+        <x>1160</x>
         <y>130</y>
         <width>113</width>
         <height>22</height>
@@ -1051,7 +1078,7 @@
      <widget class="QComboBox" name="fe_sample_combobox">
       <property name="geometry">
        <rect>
-        <x>760</x>
+        <x>1160</x>
         <y>40</y>
         <width>111</width>
         <height>22</height>
@@ -1061,7 +1088,7 @@
      <widget class="QPushButton" name="fe_edit_button">
       <property name="geometry">
        <rect>
-        <x>770</x>
+        <x>1160</x>
         <y>170</y>
         <width>93</width>
         <height>28</height>
@@ -1074,7 +1101,7 @@
      <widget class="QLabel" name="fe_edit_label">
       <property name="geometry">
        <rect>
-        <x>770</x>
+        <x>1160</x>
         <y>10</y>
         <width>101</width>
         <height>16</height>
@@ -1110,8 +1137,8 @@
        <rect>
         <x>20</x>
         <y>30</y>
-        <width>531</width>
-        <height>181</height>
+        <width>821</width>
+        <height>201</height>
        </rect>
       </property>
       <row>
@@ -1423,10 +1450,10 @@
      <widget class="QTableWidget" name="IronSampleTable">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>270</y>
-        <width>511</width>
-        <height>192</height>
+        <x>20</x>
+        <y>350</y>
+        <width>591</width>
+        <height>201</height>
        </rect>
       </property>
       <column>
@@ -1458,8 +1485,8 @@
      <widget class="QLabel" name="SampleCalculations">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>250</y>
+        <x>30</x>
+        <y>320</y>
         <width>161</width>
         <height>16</height>
        </rect>
@@ -1471,7 +1498,7 @@
      <widget class="QLineEdit" name="factor_grams_value">
       <property name="geometry">
        <rect>
-        <x>570</x>
+        <x>950</x>
         <y>50</y>
         <width>121</width>
         <height>27</height>
@@ -1481,7 +1508,7 @@
      <widget class="QLineEdit" name="factor_ml_value">
       <property name="geometry">
        <rect>
-        <x>570</x>
+        <x>950</x>
         <y>100</y>
         <width>121</width>
         <height>27</height>
@@ -1491,7 +1518,7 @@
      <widget class="QPushButton" name="iron_factor_next_button">
       <property name="geometry">
        <rect>
-        <x>570</x>
+        <x>950</x>
         <y>180</y>
         <width>121</width>
         <height>32</height>
@@ -1504,8 +1531,8 @@
      <widget class="QLabel" name="label">
       <property name="geometry">
        <rect>
-        <x>550</x>
-        <y>0</y>
+        <x>950</x>
+        <y>10</y>
         <width>221</width>
         <height>20</height>
        </rect>
@@ -1517,7 +1544,7 @@
      <widget class="QLabel" name="iron_factor_grams_text">
       <property name="geometry">
        <rect>
-        <x>570</x>
+        <x>950</x>
         <y>30</y>
         <width>121</width>
         <height>16</height>
@@ -1530,7 +1557,7 @@
      <widget class="QLabel" name="iron_factor_ml_text">
       <property name="geometry">
        <rect>
-        <x>570</x>
+        <x>950</x>
         <y>80</y>
         <width>121</width>
         <height>16</height>
@@ -1543,7 +1570,7 @@
      <widget class="QLabel" name="iron_factor_label_vaue">
       <property name="geometry">
        <rect>
-        <x>890</x>
+        <x>1300</x>
         <y>10</y>
         <width>60</width>
         <height>16</height>
@@ -1556,7 +1583,7 @@
      <widget class="QLCDNumber" name="factor_display">
       <property name="geometry">
        <rect>
-        <x>900</x>
+        <x>1300</x>
         <y>50</y>
         <width>64</width>
         <height>23</height>
@@ -1566,8 +1593,8 @@
      <widget class="QSplitter" name="splitter_5">
       <property name="geometry">
        <rect>
-        <x>550</x>
-        <y>270</y>
+        <x>640</x>
+        <y>350</y>
         <width>131</width>
         <height>191</height>
        </rect>
@@ -1602,7 +1629,7 @@
      <widget class="QComboBox" name="iron_input_combobox">
       <property name="geometry">
        <rect>
-        <x>750</x>
+        <x>1160</x>
         <y>90</y>
         <width>111</width>
         <height>22</height>
@@ -1612,7 +1639,7 @@
      <widget class="QLineEdit" name="iron_edit_input">
       <property name="geometry">
        <rect>
-        <x>750</x>
+        <x>1160</x>
         <y>130</y>
         <width>113</width>
         <height>22</height>
@@ -1622,7 +1649,7 @@
      <widget class="QComboBox" name="iron_sample_combobox">
       <property name="geometry">
        <rect>
-        <x>750</x>
+        <x>1160</x>
         <y>40</y>
         <width>111</width>
         <height>22</height>
@@ -1632,8 +1659,8 @@
      <widget class="QPushButton" name="iron_edit_button">
       <property name="geometry">
        <rect>
-        <x>760</x>
-        <y>180</y>
+        <x>1170</x>
+        <y>170</y>
         <width>93</width>
         <height>28</height>
        </rect>
@@ -1645,7 +1672,7 @@
      <widget class="QLabel" name="iron_edit_label">
       <property name="geometry">
        <rect>
-        <x>770</x>
+        <x>1160</x>
         <y>10</y>
         <width>101</width>
         <height>16</height>
@@ -1676,7 +1703,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1015</width>
+     <width>1430</width>
      <height>26</height>
     </rect>
    </property>

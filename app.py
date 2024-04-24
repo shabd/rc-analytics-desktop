@@ -21,6 +21,8 @@ from reportlab.lib.styles import getSampleStyleSheet
 
 
 
+
+
 class LabSystem(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -501,8 +503,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         file_time = time.strftime("Date_%d-%m-%Y_Time_%H-%M-%S")
         image_path = "Pics/rci as logo.png"
 
-        # samples_data = [["Sample Ref ID","CR %","Cr2O3 %","Fe %", "Fe0 %"]]
-        samples_data = [["Sample ","CR %","Cr2O3 %","Fe %", "Fe0 %"]]
+        samples_data = [["Sample Ref ID","CR %","Cr2O3 %","Fe %", "Fe0 %"]]
+        # samples_data = [["Sample ","CR %","Cr2O3 %","Fe %", "Fe0 %"]]
         sampletables = self.extractSampleTables()
         #iron chrome
         i=0
@@ -510,9 +512,9 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         while i < len(sampletables[2]):
             index_chrome = self.findSampleIndex(sampletables[2][i][0],sampletables[0])
             if index_chrome != -1 :
-                # item = [sampletables[2][i][0],"",sampletables[0][index_chrome][4],"",sampletables[2][i][4]]
+                item = [sampletables[2][i][0],"",sampletables[0][index_chrome][4],"",sampletables[2][i][4]]
                 
-                item = ["Iron + Chrome","",sampletables[0][index_chrome][4],"",sampletables[2][i][4]]
+                # item = ["Iron + Chrome","",sampletables[0][index_chrome][4],"",sampletables[2][i][4]]
 
                 samples_data.append(item)
                 sampletables[2].pop(i)
@@ -526,8 +528,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         while i < len(sampletables[2]):
             index_fe = self.findSampleIndex(sampletables[2][i][0],sampletables[1])
             if index_fe != -1 :
-                # item = [sampletables[2][i][0],sampletables[1][index_fe][3],"",sampletables[2][i][3],""]
-                item = ["Iron + Ferro chrome",sampletables[1][index_fe][3],"",sampletables[2][i][3],""]
+                item = [sampletables[2][i][0],sampletables[1][index_fe][3],"",sampletables[2][i][3],""]
+                # item = ["Iron + Ferro chrome",sampletables[1][index_fe][3],"",sampletables[2][i][3],""]
 
                 samples_data.append(item)
                 sampletables[2].pop(i)
@@ -535,36 +537,39 @@ class LabSystem(QMainWindow, Ui_MainWindow):
                 i-=1
             i+=1
 
-        i=0
+        # i=0
         for i in range(len(sampletables[0])):
-            # item = [sampletables[0][i][0],sampletables[0][i][3],sampletables[0][i][4],"",""]
-            item = ["Chrome",sampletables[0][i][3],sampletables[0][i][4],"",""]
+            item = [sampletables[0][i][0],sampletables[0][i][3],sampletables[0][i][4],"",""]
+            # item = ["Chrome",sampletables[0][i][3],sampletables[0][i][4],"",""]
             samples_data.append(item)
 
         for i in range(len(sampletables[1])):
-            # item = [sampletables[1][i][0],sampletables[1][i][3],"","",""]
-            item = ["Ferro Chrome",sampletables[1][i][3],"","",""]
+            item = [sampletables[1][i][0],sampletables[1][i][3],"","",""]
+            # item = ["Ferro Chrome",sampletables[1][i][3],"","",""]
 
             samples_data.append(item)
 
         for i in range(len(sampletables[2])):
-            # item = [sampletables[2][i][0],"","",sampletables[2][i][3],sampletables[2][i][4]]
-            item = ["Iron","","",sampletables[2][i][3],sampletables[2][i][4]]
+            item = [sampletables[2][i][0],"","",sampletables[2][i][3],sampletables[2][i][4]]
+            # item = ["Iron","","",sampletables[2][i][3],sampletables[2][i][4]]
 
             samples_data.append(item)
+
+                
+
         print(samples_data)
 
         current_date = datetime.date.today()
         current_time = datetime.datetime.now().time()
-        try:
+        # try:
 
-            self.saveAllTablesPdf(file_time,image_path,samples_data,current_date,current_time)
-            self.saveExcel(file_time,image_path,samples_data,current_date,current_time)
+        self.saveAllTablesPdf(file_time,image_path,samples_data,current_date,current_time)
+        self.saveExcel(file_time,image_path,samples_data,current_date,current_time)
 
-            QMessageBox.information(self, "Success", f"Data saved successfully to  rci_{file_time}.pdf & rci_{file_time}.xlsx !")
+        QMessageBox.information(self, "Success", f"Data saved successfully to  rci_{file_time}.pdf & rci_{file_time}.xlsx !")
 
-        except:
-            QMessageBox.warning(self, "Error in Saving PDF", "An Error Occured during Saving the file , please try again later")
+        # except:
+        #     QMessageBox.warning(self, "Error in Saving PDF", "An Error Occured during Saving the file , please try again later")
 
 
     def saveAllTablesPdf(self,file_time,image_path,samples_data,current_date,current_time):
@@ -590,6 +595,9 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         header_style = styles['Heading1']
         header_style.fontSize = header_font_size
         header_style.alignment =1
+
+        elements.append(Spacer(1, 0.5 * cm))  # Adjust spacing
+
         header_text = "FINAL CERTIFICATE OF ANALYSIS"
         elements.append(Paragraph(header_text, header_style))
         header_text = "REVISION 0"
@@ -639,7 +647,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
 
 
-        factors_data = [[["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias"]],
+        factors_data = [[["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias",]],
             [["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias"]],
             [["Sample Name", "Grams", "Ml", "Factor", "%Fe", "Known %", "Bias", "%FeO"]]]
 
@@ -701,6 +709,44 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             )))
 
             elements.append(Table([[""]], colWidths=[doc.width]))
+
+
+        elements.append(PageBreak())
+
+        sample_data = [[["Ref ID", "Grams", "Ml", "Cal % CR","% Calc Cr2O3","Factor"]],
+                    [["Ref ID", "Grams", "Ml", "Cal % CR","Factor"]],
+                    [["Ref ID", "Grams", "Ml", "%Fe", "%FeO","Factor"]]]
+
+        for i in range(3):
+            for row in range(self.sample_table_widgets[i].rowCount()):
+                row_data = []
+                for col in range(self.sample_table_widgets[i].columnCount()):
+                    item = self.sample_table_widgets[i].item(row, col)
+                    row_data.append(item.text() if item else "")
+                row_data.append(self.analysis[i].factor_average)
+                sample_data[i].append(row_data)
+
+            # Add the Sample Table to the elements
+            sample_table = Table(sample_data[i], hAlign='LEFT')
+            sample_table.setStyle(TableStyle([
+                ('BACKGROUND', (0,0), (-1,0), colors.blue),
+                ('GRID', (0,0), (-1,-1), 1, colors.black),
+                ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke)
+            ]))
+
+            elements.append(Paragraph(f"<b>{self.analysis[i].name} Sample Calculation Table</b>", style=ParagraphStyle(
+                alignment=TA_LEFT,  
+                fontSize=24,   
+                fontName="Helvetica-Bold",
+                name='FactorCalculationTable'
+            )))
+            elements.append(Table([[""]], colWidths=[doc.width]))            
+
+            elements.append(sample_table)
+            elements.append(Table([[""]], colWidths=[doc.width]))
+
+
+
 
         doc.build(elements)
 
