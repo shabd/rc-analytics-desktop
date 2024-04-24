@@ -610,16 +610,16 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
         # Create paragraphs for contact information
         from_text = Paragraph("FROM:         RCI Analytical Services", contact_style)
-        tel_text = Paragraph("TEL:", contact_style)
-        fax_text = Paragraph("FAX:", contact_style)
+        # tel_text = Paragraph("TEL:", contact_style)
+        # fax_text = Paragraph("FAX:", contact_style)
         date_text = Paragraph(f"Date:       {current_date}", contact_style)
         time_text = Paragraph(f"Time:       {current_time.hour:02d}:{current_time.minute:02d}:{current_time.second:02d}", contact_style)
 
         # elements.append(Spacer(1, 0.5 * cm))  # Adjust spacing
 
         elements.append(from_text)
-        elements.append(tel_text)
-        elements.append(fax_text)
+        # elements.append(tel_text)
+        # elements.append(fax_text)
         elements.append(date_text)
         elements.append(time_text)
 
@@ -774,8 +774,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
 
         ws['A15'] = 'FROM'
-        ws['A16'] = 'TEL'
-        ws['A17'] = 'FAX'
+        # ws['A16'] = 'TEL'
+        # ws['A17'] = 'FAX'
         ws['A18'] = 'Date'
         ws['A19'] = 'Time'
 
