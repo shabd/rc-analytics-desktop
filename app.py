@@ -6,7 +6,7 @@ from rc_onesave_ui import Ui_MainWindow
 from Chrome_conentrate_and_ore_cal import ChromeOreAnalysis
 from FeroChrome_calculation import FeroChromeAnalysis
 from Iron_calculation import IronAnalysis
-
+import os
 import sys
 import time
 import datetime
@@ -506,8 +506,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
     def savePdfandSheet(self):
         file_time = time.strftime("Date_%d-%m-%Y_Time_%H-%M-%S")
-        image_path = "Pics/rci as logo.png"
-
+        image_path = os.path.join("Pics/rci as logo.png")
         samples_data = [["Sample Ref ID","Cr %","Cr2O3 %","Fe %", "FeO %"]]
         # samples_data = [["Sample ","CR %","Cr2O3 %","Fe %", "Fe0 %"]]
         sampletables = self.extractSampleTables()
