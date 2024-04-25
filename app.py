@@ -96,6 +96,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.update_sample_info_label()
         self.hide_sample_calculations()
         self.hide_edit()
+        self.populate_comboboxes()
 
 
 
@@ -296,7 +297,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
                 self.update_factor_display()
             else:
                 self.show_edit()
-                self.populate_comboboxes()
+                # self.populate_comboboxes()
 
 
             
@@ -370,6 +371,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.clear_display()
         self.calculated[self.index ] = False
         self.hide_edit()
+        # self.populate_comboboxes()
     
     def sample_results(self):
         # Collect the input data
