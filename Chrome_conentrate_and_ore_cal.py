@@ -7,9 +7,9 @@ class ChromeOreAnalysis:
     def __init__(self):
         self.name = "Chrome Ore"
         self.known_samples = {
-            "SARM146": {"Constant": 32.09},
-            "SARM131": {"Constant": 28.62},
-            "AMIS0388": {"Constant": 27.46}
+            "SARM146": {"Constant": 0.3209},
+            "SARM131": {"Constant": 0.2866},
+            "AMIS0388": {"Constant": 0.2746}
         }
 
         self.known_values = [32.09,28.66,27.46]
