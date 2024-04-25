@@ -20,7 +20,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='rci_app',
+    name='rc_analytical',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
