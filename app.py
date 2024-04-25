@@ -440,8 +440,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     def populate_comboboxes(self):
 
         sample_names = list(self.analysis[self.index].known_samples.keys())
-        # self.sample_comboboxes[self.index] =[]
-        # self.input_comboboxes[self.index]=[]
+        self.sample_comboboxes[self.index].clear()
+        self.input_comboboxes[self.index].clear()
         self.sample_comboboxes[self.index].addItems(sample_names)
         self.input_comboboxes[self.index].addItems(["grams","mL"])
 
@@ -727,7 +727,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
                 for col in range(self.sample_table_widgets[i].columnCount()):
                     item = self.sample_table_widgets[i].item(row, col)
                     row_data.append(item.text() if item else "")
-                row_data.append(self.analysis[i].factor_average)
+                factor_average = f"{self.analysis[i].factor_average:.7f}"
+                row_data.append(factor_average)
                 sample_data[i].append(row_data)
 
             # Add the Sample Table to the elements
