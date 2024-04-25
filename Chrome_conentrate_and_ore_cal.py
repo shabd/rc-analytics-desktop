@@ -12,7 +12,8 @@ class ChromeOreAnalysis:
             "AMIS0388": {"Constant": 0.2746}
         }
 
-        self.known_values = [32.09,28.66,27.46]
+        # self.known_values = [32.09,28.66,27.46]
+        self.known_values = [32.09,28.62,27.24]
         
         self.factor_average = None 
         self.tested_samples = []

@@ -53,6 +53,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.splitters =[self.splitter_7,self.splitter_2,self.splitter_5]
         self.init_sample_values_labels()
         self.init_edit()
+
         self.connect_edit_buttons()
 
         self.sample_info_labels = [self.cr_sample_info,self.FeSampleInfo,self.label]
@@ -439,6 +440,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     def populate_comboboxes(self):
 
         sample_names = list(self.analysis[self.index].known_samples.keys())
+        # self.sample_comboboxes[self.index] =[]
+        # self.input_comboboxes[self.index]=[]
         self.sample_comboboxes[self.index].addItems(sample_names)
         self.input_comboboxes[self.index].addItems(["grams","mL"])
 

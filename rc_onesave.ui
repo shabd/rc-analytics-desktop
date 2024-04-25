@@ -98,7 +98,7 @@
       </column>
       <column>
        <property name="text">
-        <string>ML</string>
+        <string>mL</string>
        </property>
       </column>
       <column>
@@ -403,7 +403,7 @@
       </column>
       <column>
        <property name="text">
-        <string>ML</string>
+        <string>mL</string>
        </property>
       </column>
       <column>
@@ -468,7 +468,7 @@
       <widget class="QLineEdit" name="cr_sample_grams_value"/>
       <widget class="QLabel" name="cr_sample_ml_text">
        <property name="text">
-        <string>ML</string>
+        <string>mL</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="cr_sample_ml_value"/>
@@ -511,7 +511,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>ML</string>
+       <string>mL</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="cr_factor_ml_value">
@@ -673,7 +673,7 @@
       </column>
       <column>
        <property name="text">
-        <string>ML</string>
+        <string>mL</string>
        </property>
       </column>
       <column>
@@ -941,7 +941,7 @@
       </column>
       <column>
        <property name="text">
-        <string>ML</string>
+        <string>mL</string>
        </property>
       </column>
       <column>
@@ -989,7 +989,7 @@
       <widget class="QLineEdit" name="fe_sample_grams_value"/>
       <widget class="QLabel" name="fe_sample_ml_text">
        <property name="text">
-        <string>ML</string>
+        <string>mL</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="fe_sample_ml_value"/>
@@ -1032,7 +1032,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>ML</string>
+       <string>mL</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="fe_factor_ml_value">
@@ -1181,7 +1181,7 @@
       </column>
       <column>
        <property name="text">
-        <string>ML</string>
+        <string>mL</string>
        </property>
       </column>
       <column>
@@ -1471,7 +1471,7 @@
       </column>
       <column>
        <property name="text">
-        <string>ML</string>
+        <string>mL</string>
        </property>
       </column>
       <column>
@@ -1567,7 +1567,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>ML</string>
+       <string>mL</string>
       </property>
      </widget>
      <widget class="QLabel" name="iron_factor_label_vaue">
@@ -1619,7 +1619,7 @@
       <widget class="QLineEdit" name="sample_grams"/>
       <widget class="QLabel" name="sample_ml_text">
        <property name="text">
-        <string>Ml</string>
+        <string>mL</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="sample_ml"/>
