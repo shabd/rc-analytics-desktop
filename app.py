@@ -438,7 +438,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
         sample_names = list(self.analysis[self.index].known_samples.keys())
         self.sample_comboboxes[self.index].addItems(sample_names)
-        self.input_comboboxes[self.index].addItems(["grams","ml"])
+        self.input_comboboxes[self.index].addItems(["grams","mL"])
 
 
     def hide_sample_calculations(self):
@@ -503,7 +503,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         file_time = time.strftime("Date_%d-%m-%Y_Time_%H-%M-%S")
         image_path = "Pics/rci as logo.png"
 
-        samples_data = [["Sample Ref ID","CR %","Cr2O3 %","Fe %", "Fe0 %"]]
+        samples_data = [["Sample Ref ID","Cr %","Cr2O3 %","Fe %", "FeO %"]]
         # samples_data = [["Sample ","CR %","Cr2O3 %","Fe %", "Fe0 %"]]
         sampletables = self.extractSampleTables()
         #iron chrome
@@ -647,9 +647,9 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
 
 
-        factors_data = [[["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias",]],
-            [["Sample Name", "Grams", "Ml", "Factor", "%CR", "Known %", "Bias"]],
-            [["Sample Name", "Grams", "Ml", "Factor", "%Fe", "Known %", "Bias", "%FeO"]]]
+        factors_data = [[["Sample Name", "Grams", "mL", "Factor", "%Cr", "Known %", "Bias",]],
+            [["Sample Name", "Grams", "mL", "Factor", "%Cr", "Known %", "Bias"]],
+            [["Sample Name", "Grams", "mL", "Factor", "%Fe", "Known %", "Bias", "%FeO"]]]
 
         for i in range(3):
             for row in range(self.table_widgets[i].rowCount()):
@@ -684,7 +684,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             elements.append(Table([[""]], colWidths=[doc.width]))
 
             factor_average = self.analysis[i].factor_average
-            elements.append(Paragraph(f"<b>Factor Average: {factor_average:.6f}</b>", style=ParagraphStyle(
+            elements.append(Paragraph(f"<b>Factor Average: {factor_average:.7f}</b>", style=ParagraphStyle(
                 alignment=TA_LEFT,  
                 fontSize=10,   
                 fontName="Helvetica-Bold",
@@ -693,7 +693,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
 
             standard_deviation = self.analysis[i].standard_deviation
-            elements.append(Paragraph(f"<b>Factor Standard Deviation: {standard_deviation:.6f}</b>", style=ParagraphStyle(
+            elements.append(Paragraph(f"<b>Factor Standard Deviation: {standard_deviation:.7f}</b>", style=ParagraphStyle(
                 alignment=TA_LEFT,  
                 fontSize=10,   
                 fontName="Helvetica-Bold",
@@ -701,7 +701,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             )))
 
             coefficient_of_variation = self.analysis[i].coefficient_of_variation
-            elements.append(Paragraph(f"<b>Factor Standard Deviation Percentage: {coefficient_of_variation:.2f}</b>", style=ParagraphStyle(
+            elements.append(Paragraph(f"<b>Factor Standard Deviation Percentage: {coefficient_of_variation:.7f}</b>", style=ParagraphStyle(
                 alignment=TA_LEFT,  
                 fontSize=10,   
                 fontName="Helvetica-Bold",
@@ -713,9 +713,9 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
         elements.append(PageBreak())
 
-        sample_data = [[["Ref ID", "Grams", "Ml", "Cal % CR","% Calc Cr2O3","Factor"]],
-                    [["Ref ID", "Grams", "Ml", "Cal % CR","Factor"]],
-                    [["Ref ID", "Grams", "Ml", "%Fe", "%FeO","Factor"]]]
+        sample_data = [[["Ref ID", "Grams", "mL", "Cal % Cr","% Calc Cr2O3","Factor"]],
+                    [["Ref ID", "Grams", "mL", "Cal % Cr","Factor"]],
+                    [["Ref ID", "Grams", "mL", "%Fe", "%FeO","Factor"]]]
 
         for i in range(3):
             for row in range(self.sample_table_widgets[i].rowCount()):
