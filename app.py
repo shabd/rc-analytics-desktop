@@ -451,7 +451,11 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.sample_table_widgets[self.index].setVisible(False)
         self.splitters[self.index].setVisible(False)
 
-        self.save_button.setVisible(False)
+        if self.calculated[0] or self.calculated[1] or self.calculated[2]:
+            self.save_button.setVisible(True)
+
+        else:
+            self.save_button.setVisible(False)
 
 
     def show_sample_calculations(self):
@@ -461,7 +465,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.splitters[self.index].setVisible(True)
 
         # if self.calculated[0] and not(self.calculated[1]) and not(self.calculated[2]):
-        if self.calculated[0] and self.calculated[1] and self.calculated[2]:
+        if self.calculated[0] or self.calculated[1] or self.calculated[2]:
             self.save_button.setVisible(True)
 
     def update_grams_field(self):
@@ -665,54 +669,55 @@ class LabSystem(QMainWindow, Ui_MainWindow):
                     row_data.append(item.text() if item else "")
                 factors_data[i].append(row_data)
 
-            # Add the Factors Table to the elements
-            factors_table = Table(factors_data[i], hAlign='LEFT')
-            factors_table.setStyle(TableStyle([
-                ('BACKGROUND', (0,0), (-1,0), colors.blue),
-                ('GRID', (0,0), (-1,-1), 1, colors.black),
-                ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke)
-            ]))
+            if (self.calculated[i]):
+                # Add the Factors Table to the elements
+                factors_table = Table(factors_data[i], hAlign='LEFT')
+                factors_table.setStyle(TableStyle([
+                    ('BACKGROUND', (0,0), (-1,0), colors.blue),
+                    ('GRID', (0,0), (-1,-1), 1, colors.black),
+                    ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke)
+                ]))
 
-            
-            elements.append(Paragraph(f"<b>{self.analysis[i].name} Factor Calculation Table</b>", style=ParagraphStyle(
-                            alignment=TA_LEFT,  
-                            fontSize=24,   
-                            fontName="Helvetica-Bold",
-                            name='FactorCalculationTable'
-                        )))
-            elements.append(Table([[""]], colWidths=[doc.width]))
+                
+                elements.append(Paragraph(f"<b>{self.analysis[i].name} Factor Calculation Table</b>", style=ParagraphStyle(
+                                alignment=TA_LEFT,  
+                                fontSize=24,   
+                                fontName="Helvetica-Bold",
+                                name='FactorCalculationTable'
+                            )))
+                elements.append(Table([[""]], colWidths=[doc.width]))
 
-            elements.append(factors_table)
-            
-            # Adding a space between tables
-            elements.append(Table([[""]], colWidths=[doc.width]))
+                elements.append(factors_table)
+                
+                # Adding a space between tables
+                elements.append(Table([[""]], colWidths=[doc.width]))
 
-            factor_average = self.analysis[i].factor_average
-            elements.append(Paragraph(f"<b>Factor Average: {factor_average:.7f}</b>", style=ParagraphStyle(
-                alignment=TA_LEFT,  
-                fontSize=10,   
-                fontName="Helvetica-Bold",
-                name='FactorAverage'
-            )))
+                factor_average = self.analysis[i].factor_average
+                elements.append(Paragraph(f"<b>Factor Average: {factor_average:.7f}</b>", style=ParagraphStyle(
+                    alignment=TA_LEFT,  
+                    fontSize=10,   
+                    fontName="Helvetica-Bold",
+                    name='FactorAverage'
+                )))
 
 
-            standard_deviation = self.analysis[i].standard_deviation
-            elements.append(Paragraph(f"<b>Factor Standard Deviation: {standard_deviation:.7f}</b>", style=ParagraphStyle(
-                alignment=TA_LEFT,  
-                fontSize=10,   
-                fontName="Helvetica-Bold",
-                name='StandardDeviation'
-            )))
+                standard_deviation = self.analysis[i].standard_deviation
+                elements.append(Paragraph(f"<b>Factor Standard Deviation: {standard_deviation:.7f}</b>", style=ParagraphStyle(
+                    alignment=TA_LEFT,  
+                    fontSize=10,   
+                    fontName="Helvetica-Bold",
+                    name='StandardDeviation'
+                )))
 
-            coefficient_of_variation = self.analysis[i].coefficient_of_variation
-            elements.append(Paragraph(f"<b>Factor Standard Deviation Percentage: {coefficient_of_variation:.7f}</b>", style=ParagraphStyle(
-                alignment=TA_LEFT,  
-                fontSize=10,   
-                fontName="Helvetica-Bold",
-                name= 'StandardDeviationPercentage'
-            )))
+                coefficient_of_variation = self.analysis[i].coefficient_of_variation
+                elements.append(Paragraph(f"<b>Factor Standard Deviation Percentage: {coefficient_of_variation:.7f}</b>", style=ParagraphStyle(
+                    alignment=TA_LEFT,  
+                    fontSize=10,   
+                    fontName="Helvetica-Bold",
+                    name= 'StandardDeviationPercentage'
+                )))
 
-            elements.append(Table([[""]], colWidths=[doc.width]))
+                elements.append(Table([[""]], colWidths=[doc.width]))
 
 
         elements.append(PageBreak())
