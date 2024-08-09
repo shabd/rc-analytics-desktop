@@ -514,6 +514,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         samples_data = [["Sample Ref ID","Cr %","Cr2O3 %","Fe %", "FeO %"]]
         # samples_data = [["Sample ","CR %","Cr2O3 %","Fe %", "Fe0 %"]]
         sampletables = self.extractSampleTables()
+        cr_fe_data =[["Sample Ref ID","Cr %","Fe %", "Cr/Fe Ratio"]]
         #iron chrome
         i=0
         # for i in range(len(sampletables[2])):
@@ -521,6 +522,9 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             index_chrome = self.findSampleIndex(sampletables[2][i][0],sampletables[0])
             if index_chrome != -1 :
                 item = [sampletables[2][i][0],"",sampletables[0][index_chrome][4],"",sampletables[2][i][4]]
+                ratio_item = [sampletables[2][i][0],sampletables[0][index_chrome][4],sampletables[2][i][4],str(round(float(sampletables[0][index_chrome][4])/float(sampletables[2][i][4]),2))]
+                # print(ratio_item)
+                cr_fe_data.append(ratio_item)
                 
                 # item = ["Iron + Chrome","",sampletables[0][index_chrome][4],"",sampletables[2][i][4]]
 
@@ -571,7 +575,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         current_time = datetime.datetime.now().time()
         # try:
 
-        self.saveAllTablesPdf(file_time,image_path,samples_data,current_date,current_time)
+        self.saveAllTablesPdf(file_time,image_path,samples_data,cr_fe_data,current_date,current_time)
         self.saveExcel(file_time,image_path,samples_data,current_date,current_time)
 
         QMessageBox.information(self, "Success", f"Data saved successfully to  rci_{file_time}.pdf & rci_{file_time}.xlsx !")
@@ -580,7 +584,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         #     QMessageBox.warning(self, "Error in Saving PDF", "An Error Occured during Saving the file , please try again later")
 
 
-    def saveAllTablesPdf(self,file_time,image_path,samples_data,current_date,current_time):
+    def saveAllTablesPdf(self,file_time,image_path,samples_data,ratio_data,current_date,current_time):
 
         filename = "rci"
         ext=".pdf"
@@ -646,7 +650,18 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         ]))
         elements.append(sample_table)
 
-        # elements.append(Table([[""]], colWidths=[doc.width]))
+        elements.append(Table([[""]], colWidths=[doc.width]))
+        ratio_table = Table(ratio_data, hAlign='LEFT')
+        ratio_table.setStyle(TableStyle([
+            ('BACKGROUND', (0,0), (-1,0), colors.blue),
+            ('BACKGROUND', (0,0), (0,-1), colors.blue),
+
+            ('GRID', (0,0), (-1,-1), 1, colors.black),
+            ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke),
+            ('TEXTCOLOR',(0,0),(0,-1),colors.whitesmoke)
+
+        ]))
+        elements.append(ratio_table)
 
         
         elements.append(PageBreak())
