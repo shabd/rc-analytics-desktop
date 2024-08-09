@@ -1,8 +1,9 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QApplication,QMainWindow, QMessageBox, QTableWidgetItem,QLCDNumber,QTableWidget
+from PyQt6.QtWidgets import QApplication,QMainWindow, QMessageBox, QTableWidgetItem,QLCDNumber,QTableWidget,QDialog
 from PyQt6.QtGui import QPalette,QDoubleValidator,QIcon
 
 from rc_onesave_ui import Ui_MainWindow
+from names import Ui_Dialog
 from Chrome_conentrate_and_ore_cal import ChromeOreAnalysis
 from FeroChrome_calculation import FeroChromeAnalysis
 from Iron_calculation import IronAnalysis
@@ -77,7 +78,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.init_tab()
 
         self.connect_next_buttons()
-        self.save_button.clicked.connect(self.savePdfandSheet)
+        self.save_button.clicked.connect(self.openNamesDialog)
         
         self.set_on_text_changed()
 
@@ -507,8 +508,19 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             
         return -1
 
+    def openNamesDialog(self):
+        from namesdialog import NamesDialog
+        dialog = NamesDialog(self)
+        result = dialog.exec()
+        print(result)
 
-    def savePdfandSheet(self):
+        if result:
+            analyst_name = dialog.ui.analyst_name.text()
+            supervisor_name = dialog.ui.supervisor_name.text()
+            self.savePdfandSheet(analyst_name,supervisor_name)
+
+    def savePdfandSheet(self,analyst_name,supervisor_name):
+        
         file_time = time.strftime("Date_%d-%m-%Y_Time_%H-%M-%S")
         image_path = os.path.join("Pics/rci as logo.png")
         samples_data = [["Sample Ref ID","Cr %","Cr2O3 %","Fe %", "FeO %"]]
@@ -575,7 +587,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         current_time = datetime.datetime.now().time()
         # try:
 
-        self.saveAllTablesPdf(file_time,image_path,samples_data,cr_fe_data,current_date,current_time)
+        self.saveAllTablesPdf(file_time,image_path,samples_data,cr_fe_data,current_date,current_time,analyst_name,supervisor_name)
         self.saveExcel(file_time,image_path,samples_data,current_date,current_time)
 
         QMessageBox.information(self, "Success", f"Data saved successfully to  rci_{file_time}.pdf & rci_{file_time}.xlsx !")
@@ -584,7 +596,7 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         #     QMessageBox.warning(self, "Error in Saving PDF", "An Error Occured during Saving the file , please try again later")
 
 
-    def saveAllTablesPdf(self,file_time,image_path,samples_data,ratio_data,current_date,current_time):
+    def saveAllTablesPdf(self,file_time,image_path,samples_data,ratio_data,current_date,current_time,analyst_name,supervisor_name):
 
         filename = "rci"
         ext=".pdf"
@@ -637,6 +649,13 @@ class LabSystem(QMainWindow, Ui_MainWindow):
 
         elements.append(Spacer(1, 0.5 * cm))  # Adjust spacing
 
+        analyst_text    = Paragraph(f"Analyst:        {analyst_name}",contact_style)
+        supervisor_text = Paragraph(f"Supervisor:     {supervisor_name}",contact_style)
+
+        elements.append(analyst_text)
+        elements.append(supervisor_text)
+
+        elements.append(Spacer(1, 0.5 * cm))  # Adjust spacing
 
         sample_table = Table(samples_data, hAlign='LEFT')
         sample_table.setStyle(TableStyle([
