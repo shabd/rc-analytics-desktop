@@ -534,8 +534,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             index_chrome = self.findSampleIndex(sampletables[2][i][0],sampletables[0])
             if index_chrome != -1 :
                 item = [sampletables[2][i][0],"",sampletables[0][index_chrome][4],"",sampletables[2][i][4]]
-                # ratio_item = [sampletables[2][i][0],sampletables[0][index_chrome][3],sampletables[2][i][3],str(round(float(sampletables[0][index_chrome][3])/float(sampletables[2][i][3]),2))]
-                # cr_fe_data.append(ratio_item)
+                ratio_item = [sampletables[2][i][0],sampletables[0][index_chrome][3],sampletables[2][i][3],str(round(float(sampletables[0][index_chrome][3])/float(sampletables[2][i][3]),2))]
+                cr_fe_data.append(ratio_item)
                 
                 # item = ["Iron + Chrome","",sampletables[0][index_chrome][4],"",sampletables[2][i][4]]
 
@@ -553,8 +553,8 @@ class LabSystem(QMainWindow, Ui_MainWindow):
             if index_fe != -1 :
                 item = [sampletables[2][i][0],sampletables[1][index_fe][3],"",sampletables[2][i][3],""]
                 # item = ["Iron + Ferro chrome",sampletables[1][index_fe][3],"",sampletables[2][i][3],""]
-                ratio_item = [sampletables[2][i][0],sampletables[1][index_fe][3],sampletables[2][i][3],str(round(float(sampletables[1][index_fe][3])/float(sampletables[2][i][3]),2))]
-                cr_fe_data.append(ratio_item)
+                # ratio_item = [sampletables[2][i][0],sampletables[1][index_fe][3],sampletables[2][i][3],str(round(float(sampletables[1][index_fe][3])/float(sampletables[2][i][3]),2))]
+                # cr_fe_data.append(ratio_item)
 
 
                 samples_data.append(item)
