@@ -30,7 +30,13 @@ class LabSystem(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.show()
         self.setWindowTitle("RCI Analytical Services")
-        icon = QIcon("Pics/logo.ico")
+        # dirname = os.path.dirname(__file__)
+        # relative_path = 'Pics/logo.ico'
+        # icon_path = os.path.join(dirname, relative_path)
+        icon_path = "Pics/logo.ico"
+
+
+        icon = QIcon(icon_path)
         self.setWindowIcon(icon)
 
         self.KnownValue.currentChanged.connect(self.on_tab_changed)
@@ -522,7 +528,14 @@ class LabSystem(QMainWindow, Ui_MainWindow):
     def savePdfandSheet(self,analyst_name,supervisor_name):
         
         file_time = time.strftime("Date_%d-%m-%Y_Time_%H-%M-%S")
+
+        # dirname = os.path.dirname(__file__)
+        # relative_path = 'Pics/rci as logo.png'
+        # image_path = os.path.join(dirname,relative_path)
+
         image_path = os.path.join("Pics/rci as logo.png")
+
+
         samples_data = [["Sample Ref ID","Cr %","Cr2O3 %","Fe %", "FeO %"]]
         # samples_data = [["Sample ","CR %","Cr2O3 %","Fe %", "Fe0 %"]]
         sampletables = self.extractSampleTables()
