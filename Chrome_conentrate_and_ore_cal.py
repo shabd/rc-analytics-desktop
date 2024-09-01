@@ -6,15 +6,19 @@ class ChromeOreAnalysis:
 
     def __init__(self):
         self.name = "Chrome Ore"
+        # self.known_samples = {
+        #     "SARM146": {"Constant": 0.3209},
+        #     "SARM131": {"Constant": 0.2866},
+        #     "AMIS0388": {"Constant": 0.2746}
+        # }
         self.known_samples = {
-            "SARM146": {"Constant": 0.3209},
-            "SARM131": {"Constant": 0.2866},
-            "AMIS0388": {"Constant": 0.2746}
+            "SARM146": {"Constant": 46.91},
+            "SARM131": {"Constant": 41.83},
+            "QCRM-1-131": {"Constant": 46.18},
+            "QCRM-1-114": {"Constant": 44.29}
         }
-
-        # self.known_values = [32.09,28.66,27.46]
-        self.known_values = [32.09,28.62,27.24]
-        
+        # self.known_values = [32.09,28.62,27.24]
+        self.known_values = [0.4691,0.4183,0.4618,0.4429]
         self.factor_average = None 
         self.tested_samples = []
         self.know_sample_results = []

@@ -6,14 +6,23 @@ class IronAnalysis:
 
     def __init__(self):
         self.name = "Iron"
+        # self.known_samples = {
+        #     "SARM146": {"Constant": 0.1988},
+        #     "SARM131": {"Constant": 0.2147},
+        #     "NIST64C":{"Constant":0.2499},
+        #     "SARM144":{"Constant":0.3687},
+        #     "AMIS0388": {"Constant": 0.1798}
+        # }
         self.known_samples = {
-            "SARM146": {"Constant": 0.1988},
-            "SARM131": {"Constant": 0.2147},
-            "NIST64C":{"Constant":0.2499},
-            "SARM144":{"Constant":0.3687},
-            "AMIS0388": {"Constant": 0.1798}
+            "SARM131": {"Constant": 27.62},
+            "QCRM-1-131":{"Constant": 26.11},
+            "QCRM-1-114":{"Constant": 25.09}
         }
-        self.known_values = [19.88,21.47,24.99,36.87,17.98]
+        # SARM 131 27.62
+        # QCRM-1-131 26.11
+        # QCRM-1-114 25.09
+        # self.known_values = [19.88,21.47,24.99,36.87,17.98]
+        self.known_values = [0.2762386,0.2611,0.2509]
 
         self.factor_average = None 
         self.tested_samples = []
