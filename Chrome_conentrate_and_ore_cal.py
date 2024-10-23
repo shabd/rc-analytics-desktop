@@ -17,7 +17,7 @@ class ChromeOreAnalysis:
         #     "QCRM-1-131": {"Constant": 46.18},
         #     "QCRM-1-114": {"Constant": 44.29}
         # }
-        self.known_values = [32.09,28.62,27.24]
+        self.known_values = [32.09,28.61,26.66]
         # self.known_values = [0.4691,0.4183,0.4618,0.4429]
         self.factor_average = None 
         self.tested_samples = []
